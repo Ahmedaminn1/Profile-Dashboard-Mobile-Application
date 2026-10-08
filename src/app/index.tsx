@@ -66,8 +66,8 @@ export default function index() {
         {/* Stats Section */}
         <View style={styles.stateSection}>
           <StatCard title="المشاريع" value="20+" icon="folder-outline" />
-          <StatCard title="المهارات" value="19+" icon="code-slash-outline" />
-          <StatCard title="المهام " value="42" icon="checkbox-outline" />
+          <StatCard title="المهارات" value="12+" icon="code-slash-outline" />
+          <StatCard title="المهام " value="35" icon="checkbox-outline" />
         </View>
 
         {/* About Card */}
