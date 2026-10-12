@@ -315,7 +315,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     fontSize: 14,
-    fontFamily: fontFamily.sansRegular,
+    fontFamily: fontFamily.sans,
     borderWidth: 1,
     borderRadius: 8,
     paddingHorizontal: spacing.sm,

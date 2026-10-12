@@ -146,9 +146,9 @@ export default function HelpScreen() {
           </AppText>
           <ContactLink
             label="البريد الإلكتروني"
-            value="ahmed@example.com"
+            value="ahmedamin372002@gmail.com"
             icon="mail-outline"
-            onPress={() => Linking.openURL("mailto:ahmed@example.com")}
+            onPress={() => Linking.openURL("mailto:ahmedamin372002@gmail.com")}
           />
           <ContactLink
             label="GitHub"

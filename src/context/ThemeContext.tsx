@@ -15,7 +15,7 @@ export interface ThemeContextValue {
   theme: ThemeMode;
   resolvedTheme: 'light' | 'dark';
   isDark: boolean;
-  themeColors: typeof colors.light;
+  themeColors: typeof colors.light | typeof colors.dark;
   toggleTheme: (mode: ThemeMode) => void;
   toggleLightDark: () => void;
 }
