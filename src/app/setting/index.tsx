@@ -19,22 +19,22 @@ const otherSettings: {
   {
     label: "الحساب",
     icon: "person-outline",
-    href: "/setting",
+    href: "/setting/account",
   },
   {
     label: "الاشعارات",
     icon: "notifications-outline",
-    href: "/setting",
+    href: "/setting/notifications",
   },
   {
     label: "الخصوصية",
     icon: "lock-closed-outline",
-    href: "/setting",
+    href: "/setting/privacy",
   },
   {
     label: "المساعدة",
     icon: "help-circle-outline",
-    href: "/setting",
+    href: "/setting/help",
   },
 ];
 
