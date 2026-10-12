@@ -8,6 +8,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { spacing } from "@/theme/spacing";
 import { CustomDrawerContent } from "@/components/DrawerContent";
 import { ThemeProvider, useTheme } from "@/context/ThemeContext";
+import { SkillsProvider } from "@/context/SkillsContext";
 
 function AppDrawer() {
   const { themeColors } = useTheme();
@@ -110,9 +111,11 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider>
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        <AppDrawer />
-      </GestureHandlerRootView>
+      <SkillsProvider>
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <AppDrawer />
+        </GestureHandlerRootView>
+      </SkillsProvider>
     </ThemeProvider>
   );
 }

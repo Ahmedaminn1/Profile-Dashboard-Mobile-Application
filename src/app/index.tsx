@@ -15,10 +15,12 @@ import { router, useNavigation } from "expo-router";
 import AppCard from "@/components/AppCard";
 import AppSafeAreaView from "@/components/AppSafeAreaView";
 import { useTheme } from "@/context/ThemeContext";
+import { useSkills } from "@/context/SkillsContext";
 
 export default function Index() {
   const navigation = useNavigation();
   const { isDark, themeColors, toggleLightDark } = useTheme();
+  const { skills } = useSkills();
 
   const openDrawer = () => {
     (navigation as any).openDrawer();
@@ -46,7 +48,10 @@ export default function Index() {
           </Pressable>
 
           {/* Notifications */}
-          <View style={styles.notificationWrapper}>
+          <Pressable
+            onPress={() => router.push("/setting/notifications")}
+            style={styles.notificationWrapper}
+          >
             <Ionicons
               name="notifications-outline"
               size={30}
@@ -55,7 +60,7 @@ export default function Index() {
             <View
               style={[styles.dot, { backgroundColor: themeColors.danger }]}
             />
-          </View>
+          </Pressable>
         </View>
       </View>
 
@@ -86,7 +91,7 @@ export default function Index() {
         {/* Stats Section */}
         <View style={styles.stateSection}>
           <StatCard title="المشاريع" value="20+" icon="folder-outline" />
-          <StatCard title="المهارات" value="12+" icon="code-slash-outline" />
+          <StatCard title="المهارات" value={`${skills.length}`} icon="code-slash-outline" />
           <StatCard title="المهام " value="35" icon="checkbox-outline" />
         </View>
 

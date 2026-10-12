@@ -1,106 +1,56 @@
-import React from "react";
-import { View, Pressable, FlatList } from "react-native";
+import React, { useState } from "react";
+import {
+  View,
+  Pressable,
+  FlatList,
+  Modal,
+  TextInput,
+  KeyboardAvoidingView,
+  Platform,
+  TouchableWithoutFeedback,
+  Keyboard,
+  Alert,
+} from "react-native";
 import AppSafeAreaView from "@/components/AppSafeAreaView";
-import { ScrollView } from "react-native";
 import { StyleSheet } from "react-native";
 import { spacing } from "@/theme/spacing";
 import AppText from "@/components/AppText";
 import AppCard from "@/components/AppCard";
 import { Ionicons } from "@expo/vector-icons";
-import { useNavigation, useRouter } from "expo-router";
+import { useNavigation } from "expo-router";
 import { fontSize, fontFamily } from "@/theme/typography";
 import AppButton from "@/components/AppButton";
 import SkillsCard, { SkillItem } from "@/components/SkillCard";
 import { useTheme } from "@/context/ThemeContext";
+import { useSkills } from "@/context/SkillsContext";
 
-const skills: SkillItem[] = [
-  { id: 1, title: "React", level: "متقدم", badge: "خبير", icon: "logo-react" },
-  {
-    id: 2,
-    title: "Next.js",
-    level: "متقدم",
-    badge: "خبير",
-    icon: "code-slash-outline",
-  },
-  {
-    id: 3,
-    title: "TypeScript",
-    level: "متقدم",
-    badge: "خبير",
-    icon: "code-slash-outline",
-  },
-  {
-    id: 4,
-    title: "React Native",
-    level: "متقدم",
-    badge: "خبير",
-    icon: "logo-react",
-  },
-  {
-    id: 5,
-    title: "Redux / Zustand",
-    level: "متقدم",
-    badge: "خبير",
-    icon: "cube-outline",
-  },
-  {
-    id: 6,
-    title: "JavaScript",
-    level: "متقدم",
-    badge: "محترف",
-    icon: "logo-javascript",
-  },
-  {
-    id: 7,
-    title: "HTML5 & CSS3",
-    level: "متقدم",
-    badge: "خبير",
-    icon: "logo-html5",
-  },
-  {
-    id: 8,
-    title: "Tailwind CSS",
-    level: "متقدم",
-    badge: "محترف",
-    icon: "color-palette-outline",
-  },
-  {
-    id: 9,
-    title: "React Query",
-    level: "متقدم",
-    badge: "محترف",
-    icon: "server-outline",
-  },
-  {
-    id: 10,
-    title: "Git & GitHub",
-    level: "متقدم",
-    badge: "خبير",
-    icon: "logo-github",
-  },
-  {
-    id: 11,
-    title: "Node.js",
-    level: "متوسط",
-    badge: "جيد جداً",
-    icon: "logo-nodejs",
-  },
-  {
-    id: 12,
-    title: "Figma (UI/UX)",
-    level: "متوسط",
-    badge: "جيد",
-    icon: "logo-figma",
-  },
-];
+const LEVEL_OPTIONS = ["مبتدئ", "متوسط", "متقدم"];
+const BADGE_OPTIONS = ["جيد", "جيد جداً", "محترف", "خبير"];
 
 export default function SkillsScreen() {
   const navigation = useNavigation();
-  const router = useRouter();
   const { themeColors } = useTheme();
+  const { skills, addSkill } = useSkills();
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const [title, setTitle] = useState("");
+  const [level, setLevel] = useState(LEVEL_OPTIONS[2]);
+  const [badge, setBadge] = useState(BADGE_OPTIONS[3]);
 
   const openDrawer = () => {
     (navigation as any).openDrawer();
+  };
+
+  const handleAdd = () => {
+    if (!title.trim()) {
+      Alert.alert("تنبيه", "من فضلك ادخل اسم المهارة");
+      return;
+    }
+    addSkill({ title: title.trim(), level, badge, icon: "code-slash-outline" });
+    setTitle("");
+    setLevel(LEVEL_OPTIONS[2]);
+    setBadge(BADGE_OPTIONS[3]);
+    setModalVisible(false);
   };
 
   return (
@@ -111,11 +61,7 @@ export default function SkillsScreen() {
         ItemSeparatorComponent={() => <View style={styles.itemSeparator} />}
         ListEmptyComponent={() => (
           <View style={styles.emptyList}>
-            <Ionicons
-              name="happy-outline"
-              size={42}
-              color={themeColors.primary}
-            />
+            <Ionicons name="happy-outline" size={42} color={themeColors.primary} />
             <AppText variant="subTitle">لا يوجد بيانات لعرضها</AppText>
           </View>
         )}
@@ -129,6 +75,7 @@ export default function SkillsScreen() {
         )}
         ListHeaderComponent={() => (
           <View style={{ gap: spacing.lg }}>
+            {/* Header Row */}
             <View style={styles.header}>
               <View style={{ width: 32 }} />
               <AppText variant="title" style={styles.headerTitle}>
@@ -138,6 +85,8 @@ export default function SkillsScreen() {
                 <Ionicons name="chevron-back-outline" size={32} />
               </Pressable>
             </View>
+
+            {/* Summary Card */}
             <AppCard style={styles.headerCard}>
               <View style={styles.headerCardRow}>
                 <View>
@@ -151,19 +100,31 @@ export default function SkillsScreen() {
                   >
                     {skills.length} مهارات
                   </AppText>
-                  <AppText variant="body">اضافة مهارة جديدة</AppText>
+                  <AppText variant="body">اضغط + لإضافة مهارة جديدة</AppText>
                 </View>
-                <View
-                  style={[
-                    styles.iconBox,
-                    { backgroundColor: themeColors.primarySubtle },
-                  ]}
-                >
-                  <Ionicons
-                    name="code-slash-outline"
-                    size={28}
-                    color={themeColors.primary}
-                  />
+                <View style={styles.headerCardRight}>
+                  <View
+                    style={[
+                      styles.iconBox,
+                      { backgroundColor: themeColors.primarySubtle },
+                    ]}
+                  >
+                    <Ionicons
+                      name="code-slash-outline"
+                      size={28}
+                      color={themeColors.primary}
+                    />
+                  </View>
+                  {/* Add Button */}
+                  <Pressable
+                    onPress={() => setModalVisible(true)}
+                    style={[
+                      styles.addButton,
+                      { backgroundColor: themeColors.primary },
+                    ]}
+                  >
+                    <Ionicons name="add" size={24} color="#fff" />
+                  </Pressable>
                 </View>
               </View>
             </AppCard>
@@ -171,6 +132,142 @@ export default function SkillsScreen() {
         )}
         renderItem={({ item }) => <SkillsCard item={item} />}
       />
+
+      {/* Add Skill Modal */}
+      <Modal
+        visible={modalVisible}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={styles.modalOverlay}>
+            <KeyboardAvoidingView
+              behavior={Platform.OS === "ios" ? "padding" : "height"}
+              style={{ width: "100%" }}
+            >
+              <AppCard style={[styles.modalCard, { backgroundColor: themeColors.surface }]}>
+                {/* Modal Header */}
+                <View style={styles.modalHeader}>
+                  <Pressable onPress={() => setModalVisible(false)}>
+                    <Ionicons name="close-outline" size={28} color={themeColors.text} />
+                  </Pressable>
+                  <AppText
+                    variant="title"
+                    style={{ color: themeColors.text, fontFamily: fontFamily.sansExtraBold }}
+                  >
+                    إضافة مهارة
+                  </AppText>
+                  <View style={{ width: 28 }} />
+                </View>
+
+                {/* Skill Name */}
+                <AppText
+                  variant="body"
+                  style={[styles.inputLabel, { color: themeColors.textSecondary }]}
+                >
+                  اسم المهارة
+                </AppText>
+                <TextInput
+                  value={title}
+                  onChangeText={setTitle}
+                  placeholder="مثال: Vue.js"
+                  placeholderTextColor={themeColors.textLight}
+                  style={[
+                    styles.input,
+                    {
+                      color: themeColors.text,
+                      backgroundColor: themeColors.surfaceRaised,
+                      borderColor: themeColors.border,
+                    },
+                  ]}
+                  textAlign="right"
+                />
+
+                {/* Level Picker */}
+                <AppText
+                  variant="body"
+                  style={[styles.inputLabel, { color: themeColors.textSecondary }]}
+                >
+                  المستوى
+                </AppText>
+                <View style={styles.optionRow}>
+                  {LEVEL_OPTIONS.map((opt) => (
+                    <Pressable
+                      key={opt}
+                      onPress={() => setLevel(opt)}
+                      style={[
+                        styles.optionChip,
+                        {
+                          backgroundColor:
+                            level === opt
+                              ? themeColors.primary
+                              : themeColors.surfaceRaised,
+                          borderColor: themeColors.border,
+                        },
+                      ]}
+                    >
+                      <AppText
+                        variant="body"
+                        style={{
+                          color: level === opt ? "#fff" : themeColors.text,
+                          fontFamily: fontFamily.sansBold,
+                        }}
+                      >
+                        {opt}
+                      </AppText>
+                    </Pressable>
+                  ))}
+                </View>
+
+                {/* Badge Picker */}
+                <AppText
+                  variant="body"
+                  style={[styles.inputLabel, { color: themeColors.textSecondary }]}
+                >
+                  الشارة
+                </AppText>
+                <View style={styles.optionRow}>
+                  {BADGE_OPTIONS.map((opt) => (
+                    <Pressable
+                      key={opt}
+                      onPress={() => setBadge(opt)}
+                      style={[
+                        styles.optionChip,
+                        {
+                          backgroundColor:
+                            badge === opt
+                              ? themeColors.primary
+                              : themeColors.surfaceRaised,
+                          borderColor: themeColors.border,
+                        },
+                      ]}
+                    >
+                      <AppText
+                        variant="body"
+                        style={{
+                          color: badge === opt ? "#fff" : themeColors.text,
+                          fontFamily: fontFamily.sansBold,
+                        }}
+                      >
+                        {opt}
+                      </AppText>
+                    </Pressable>
+                  ))}
+                </View>
+
+                {/* Confirm Button */}
+                <AppButton
+                  title="إضافة المهارة"
+                  onPress={handleAdd}
+                  icon="checkmark-outline"
+                  style={{ marginTop: spacing.lg }}
+                />
+              </AppCard>
+            </KeyboardAvoidingView>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
     </AppSafeAreaView>
   );
 }
@@ -191,27 +288,6 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlign: "center",
   },
-  settingsCard: {
-    marginBottom: spacing.md,
-  },
-  settingTitle: {
-    fontFamily: fontFamily.sansExtraBold,
-    fontSize: fontSize.subTitle,
-    marginBottom: spacing.md,
-  },
-  settingsCards: {
-    gap: spacing.md,
-    marginBottom: spacing.md,
-  },
-  /* Row layout inside each card */
-  settingRow: {
-    flexDirection: "row-reverse",
-    alignItems: "center",
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.md,
-    gap: spacing.md,
-  },
-  /* Tinted icon container */
   iconBox: {
     width: 52,
     height: 52,
@@ -219,23 +295,22 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  /* Label grows to fill space */
-  settingLabel: {
-    flex: 1,
-    textAlign: "right",
+  addButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    alignItems: "center",
+    justifyContent: "center",
   },
-
   itemSeparator: {
     height: spacing.md,
   },
-
   emptyList: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
     gap: spacing.md,
   },
-
   headerCard: {
     flexDirection: "row-reverse",
     alignItems: "center",
@@ -244,11 +319,63 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.md,
     marginBottom: spacing.lg,
   },
-
   headerCardRow: {
     flexDirection: "row",
     alignItems: "center",
-    gap: spacing.lg,
+    justifyContent: "space-between",
+    flex: 1,
     minHeight: 70,
+  },
+  headerCardRight: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.sm,
+  },
+  // Modal
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    justifyContent: "flex-end",
+    alignItems: "center",
+    paddingBottom: spacing.md,
+    paddingHorizontal: spacing.md,
+  },
+  modalCard: {
+    width: "100%",
+    borderRadius: 20,
+    padding: spacing.lg,
+    gap: spacing.sm,
+  },
+  modalHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: spacing.md,
+  },
+  inputLabel: {
+    textAlign: "right",
+    marginBottom: 4,
+    fontFamily: fontFamily.sansBold,
+  },
+  input: {
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+    fontSize: fontSize.md,
+    fontFamily: fontFamily.sans,
+    marginBottom: spacing.sm,
+  },
+  optionRow: {
+    flexDirection: "row-reverse",
+    gap: spacing.sm,
+    flexWrap: "wrap",
+    marginBottom: spacing.sm,
+  },
+  optionChip: {
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs,
+    borderRadius: 20,
+    borderWidth: 1,
   },
 });
