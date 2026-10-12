@@ -1,28 +1,45 @@
-import { View, Text, StyleSheet } from "react-native";
+import { Text, StyleSheet } from "react-native";
 import React from "react";
 import { fontFamily, fontSize } from "@/theme/typography";
-import { colors } from "@/theme/colors";
 import { spacing } from "@/theme/spacing";
+import { useTheme } from "@/context/ThemeContext";
 
 interface AppTextProps {
   variant?: "title" | "subTitle" | "body" | "caption" | "button";
   children: React.ReactNode;
   style?: any;
 }
+
 export default function AppText({
   children,
-  variant = "body", 
+  variant = "body",
   style,
   ...props
 }: AppTextProps) {
+  const { themeColors } = useTheme();
+
   return (
-    <Text {...props} style={[styles.base, styles[variant], style]}>{children}</Text>
+    <Text
+      {...props}
+      style={[
+        styles.base,
+        {
+          color:
+            variant === "caption"
+              ? themeColors.textSecondary
+              : themeColors.text,
+        },
+        styles[variant],
+        style,
+      ]}
+    >
+      {children}
+    </Text>
   );
 }
 
 const styles = StyleSheet.create({
   base: {
-    color: colors.light.text,
     fontSize: spacing.xl,
     fontFamily: fontFamily.sans,
     textAlign: "right",
@@ -47,7 +64,6 @@ const styles = StyleSheet.create({
     fontFamily: fontFamily.sansLight,
     fontSize: fontSize.sm,
     lineHeight: 20,
-    color: colors.light.textSecondary,
   },
   button: {
     fontFamily: fontFamily.sansBold,

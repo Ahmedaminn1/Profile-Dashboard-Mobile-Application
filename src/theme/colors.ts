@@ -74,6 +74,7 @@ export const colors = {
     text:             neutral[50],
     textSecondary:    neutral[400],
     textDisabled:     neutral[600],
+    textLight:        neutral[400],
 
     // Borders
     border:           neutral[700],

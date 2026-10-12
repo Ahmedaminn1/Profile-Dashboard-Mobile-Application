@@ -1,13 +1,11 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import React from "react";
 import AppCard from "../AppCard";
 import AppText from "../AppText";
 import { Ionicons } from "@expo/vector-icons";
-import { colors } from "@/theme/colors";
 import { spacing } from "@/theme/spacing";
-import { Image } from "expo-image";
-import { fontFamily } from "@/theme/typography";
-import { fontSize } from "@/theme/typography";
+import { fontFamily, fontSize } from "@/theme/typography";
+import { useTheme } from "@/context/ThemeContext";
 
 export interface SkillItem {
   id: number;
@@ -18,24 +16,45 @@ export interface SkillItem {
 }
 
 export default function SkillsCard({ item }: { item: SkillItem }) {
+  const { themeColors } = useTheme();
+
   return (
     <AppCard style={styles.card}>
       <View style={styles.skillRow}>
-        <View style={styles.iconBox}>
-          <Ionicons name={item.icon} size={28} color={colors.light.primary} />
+        <View
+          style={[
+            styles.iconBox,
+            { backgroundColor: themeColors.primarySubtle },
+          ]}
+        >
+          <Ionicons name={item.icon} size={28} color={themeColors.primary} />
         </View>
         <View>
-          <AppText variant="subTitle" style={styles.title}>
+          <AppText
+            variant="subTitle"
+            style={[styles.title, { color: themeColors.text }]}
+          >
             {item.title}
           </AppText>
-          <AppText variant="body" style={styles.level}>
+          <AppText
+            variant="body"
+            style={[styles.level, { color: themeColors.textLight }]}
+          >
             {item.level}
           </AppText>
         </View>
       </View>
 
-      <View style={styles.badge}>
-        <AppText style={styles.badgeText} variant="body">
+      <View
+        style={[
+          styles.badge,
+          { backgroundColor: themeColors.primarySubtle },
+        ]}
+      >
+        <AppText
+          style={[styles.badgeText, { color: themeColors.primary }]}
+          variant="body"
+        >
           {item.badge}
         </AppText>
       </View>
@@ -62,28 +81,23 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 10,
-    backgroundColor: colors.light.primarySubtle,
     alignItems: "center",
     justifyContent: "center",
   },
   title: {
-    color: colors.light.text,
     fontFamily: fontFamily.sansExtraBold,
     fontSize: fontSize.subTitle,
     marginBottom: spacing.sm,
   },
   level: {
-    color: colors.light.textLight,
     fontFamily: fontFamily.sansBold,
   },
   badge: {
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.xs,
     borderRadius: 10,
-    backgroundColor: colors.light.primarySubtle,
   },
   badgeText: {
-    color: colors.light.primary,
     fontFamily: fontFamily.sansBold,
     fontSize: fontSize.sm,
   },

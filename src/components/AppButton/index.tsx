@@ -1,12 +1,12 @@
 import { Pressable, StyleSheet } from "react-native";
 import AppText from "../AppText";
 import { spacing } from "@/theme/spacing";
-import { colors } from "@/theme/colors";
+import { useTheme } from "@/context/ThemeContext";
 import { Ionicons } from "@expo/vector-icons";
 
 interface AppButtonProps {
   title: string;
-  variant?: "primary" | "outlined" | "danger"|"success"|"warning";
+  variant?: "primary" | "outlined" | "danger" | "success" | "warning";
   style?: any;
   onPress?: () => void;
   color?: string;
@@ -20,30 +20,53 @@ export default function AppButton({
   onPress,
   icon,
 }: AppButtonProps) {
-  if (variant === undefined) {
-    throw new Error("AppButton: variant is required");
-  }
+  const { themeColors } = useTheme();
+
   const textColorMap: Record<Exclude<AppButtonProps["variant"], undefined>, string> = {
-    primary:  colors.light.background,
-    outlined: colors.light.primary,
-    danger:   colors.light.danger,
-    success:  colors.light.success,
-    warning:  colors.light.warning,
+    primary: "#FFFFFF",
+    outlined: themeColors.primary,
+    danger: themeColors.danger,
+    success: themeColors.success,
+    warning: themeColors.warning,
   };
+
+  const variantStyles = {
+    primary: {
+      backgroundColor: themeColors.primary,
+    },
+    outlined: {
+      backgroundColor: themeColors.background,
+      borderWidth: 2,
+      borderColor: themeColors.primary,
+    },
+    danger: {
+      backgroundColor: themeColors.background,
+      borderColor: themeColors.danger,
+      borderWidth: 2,
+    },
+    success: {
+      backgroundColor: themeColors.background,
+      borderColor: themeColors.success,
+      borderWidth: 2,
+    },
+    warning: {
+      backgroundColor: themeColors.background,
+      borderColor: themeColors.warning,
+      borderWidth: 2,
+    },
+  };
+
   return (
     <Pressable
       onPress={onPress}
-      style={({ pressed }: { pressed: boolean }) => ({
-        ...styles.base,
-        ...(variant === "primary" && styles.primary),
-        ...(variant === "outlined" && styles.outlined),
-        ...(variant === "danger" && styles.danger),
-        ...(variant === "success" && styles.success),
-        ...(variant === "warning" && styles.warning),
-        ...(style as any),
-        opacity: pressed ? 0.8 : 1,
-      })}>
-      <AppText variant="button"style={{ color: textColorMap[variant] }}>
+      style={({ pressed }: { pressed: boolean }) => [
+        styles.base,
+        variantStyles[variant],
+        style,
+        { opacity: pressed ? 0.8 : 1 },
+      ]}
+    >
+      <AppText variant="button" style={{ color: textColorMap[variant] }}>
         {title}
       </AppText>
       {icon && <Ionicons name={icon} size={24} color={textColorMap[variant]} />}
@@ -61,28 +84,5 @@ const styles = StyleSheet.create({
     minHeight: 58,
     paddingHorizontal: spacing.xl,
     paddingVertical: spacing.sm,
-  },
-  primary: {
-    backgroundColor: colors.light.primary,
-  },
-  outlined: {
-    backgroundColor: colors.light.background,
-    borderWidth: 2,
-    borderColor: colors.light.primary,
-  },
-  danger: {
-    backgroundColor: colors.light.background,
-    borderColor: colors.light.danger,
-    borderWidth: 2,
-  },
-  success: {
-    backgroundColor: colors.light.background,
-    borderColor: colors.light.success,
-    borderWidth: 2,
-  },
-  warning: {
-    backgroundColor: colors.light.background,
-    borderColor: colors.light.warning,
-    borderWidth: 2,
   },
 });

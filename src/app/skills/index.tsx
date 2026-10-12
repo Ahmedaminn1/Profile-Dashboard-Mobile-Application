@@ -9,9 +9,9 @@ import AppCard from "@/components/AppCard";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation, useRouter } from "expo-router";
 import { fontSize, fontFamily } from "@/theme/typography";
-import { colors } from "@/theme/colors";
 import AppButton from "@/components/AppButton";
 import SkillsCard, { SkillItem } from "@/components/SkillCard";
+import { useTheme } from "@/context/ThemeContext";
 
 const skills: SkillItem[] = [
   { id: 1, title: "React", level: "متقدم", badge: "خبير", icon: "logo-react" },
@@ -97,6 +97,7 @@ const skills: SkillItem[] = [
 export default function SkillsScreen() {
   const navigation = useNavigation();
   const router = useRouter();
+  const { themeColors } = useTheme();
 
   const openDrawer = () => {
     (navigation as any).openDrawer();
@@ -113,7 +114,7 @@ export default function SkillsScreen() {
             <Ionicons
               name="happy-outline"
               size={42}
-              color={colors.light.primary}
+              color={themeColors.primary}
             />
             <AppText variant="subTitle">لا يوجد بيانات لعرضها</AppText>
           </View>
@@ -142,21 +143,26 @@ export default function SkillsScreen() {
                 <View>
                   <AppText
                     style={{
-                      color: colors.light.primary,
+                      color: themeColors.primary,
                       fontFamily: fontFamily.sansExtraBold,
                       fontSize: fontSize.xl,
                     }}
                     variant="subTitle"
                   >
-                    6 مهارات
+                    {skills.length} مهارات
                   </AppText>
                   <AppText variant="body">اضافة مهارة جديدة</AppText>
                 </View>
-                <View style={styles.iconBox}>
+                <View
+                  style={[
+                    styles.iconBox,
+                    { backgroundColor: themeColors.primarySubtle },
+                  ]}
+                >
                   <Ionicons
                     name="code-slash-outline"
                     size={28}
-                    color={colors.light.primary}
+                    color={themeColors.primary}
                   />
                 </View>
               </View>
@@ -210,7 +216,6 @@ const styles = StyleSheet.create({
     width: 52,
     height: 52,
     borderRadius: 18,
-    backgroundColor: colors.light.primarySubtle,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -218,7 +223,6 @@ const styles = StyleSheet.create({
   settingLabel: {
     flex: 1,
     textAlign: "right",
-    color: colors.light.text,
   },
 
   itemSeparator: {

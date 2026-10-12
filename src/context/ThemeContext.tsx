@@ -1,4 +1,4 @@
-﻿import React, {
+import React, {
   createContext,
   useContext,
   useState,
@@ -11,11 +11,13 @@ import { colors } from '@/theme/colors';
 
 export type ThemeMode = 'light' | 'dark' | 'system';
 
-interface ThemeContextValue {
+export interface ThemeContextValue {
   theme: ThemeMode;
   resolvedTheme: 'light' | 'dark';
+  isDark: boolean;
   themeColors: typeof colors.light;
   toggleTheme: (mode: ThemeMode) => void;
+  toggleLightDark: () => void;
 }
 
 const STORAGE_KEY = '@app_theme_mode';
@@ -42,10 +44,25 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const resolvedTheme: 'light' | 'dark' =
     theme === 'system' ? (systemScheme === 'dark' ? 'dark' : 'light') : theme;
 
+  const isDark = resolvedTheme === 'dark';
   const themeColors = colors[resolvedTheme];
 
+  const toggleLightDark = useCallback(() => {
+    const nextMode = resolvedTheme === 'dark' ? 'light' : 'dark';
+    toggleTheme(nextMode);
+  }, [resolvedTheme, toggleTheme]);
+
   return (
-    <ThemeContext.Provider value={{ theme, resolvedTheme, themeColors, toggleTheme }}>
+    <ThemeContext.Provider
+      value={{
+        theme,
+        resolvedTheme,
+        isDark,
+        themeColors,
+        toggleTheme,
+        toggleLightDark,
+      }}
+    >
       {children}
     </ThemeContext.Provider>
   );

@@ -1,19 +1,17 @@
 import React from "react";
-import { View, Pressable } from "react-native";
+import { View, Pressable, ScrollView, StyleSheet } from "react-native";
 import AppSafeAreaView from "@/components/AppSafeAreaView";
-import { ScrollView } from "react-native";
-import { StyleSheet } from "react-native";
 import { spacing } from "@/theme/spacing";
 import AppText from "@/components/AppText";
 import AppCard from "@/components/AppCard";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation, useRouter } from "expo-router";
 import { fontSize, fontFamily } from "@/theme/typography";
-import { colors } from "@/theme/colors";
 import AppButton from "@/components/AppButton";
-import index from "..";
+import ThemeButton from "@/components/ThemeButton";
+import { useTheme } from "@/context/ThemeContext";
 
-const settings: {
+const otherSettings: {
   label: string;
   icon: React.ComponentProps<typeof Ionicons>["name"];
   href: string;
@@ -21,33 +19,29 @@ const settings: {
   {
     label: "الحساب",
     icon: "person-outline",
-    href: "/setting/account",
+    href: "/setting",
   },
   {
     label: "الاشعارات",
     icon: "notifications-outline",
-    href: "/setting/language",
-  },
-  {
-    label: "المظهر",
-    icon: "sunny-outline",
-    href: "/setting/notification",
+    href: "/setting",
   },
   {
     label: "الخصوصية",
     icon: "lock-closed-outline",
-    href: "/setting/support",
+    href: "/setting",
   },
   {
     label: "المساعدة",
     icon: "help-circle-outline",
-    href: "/setting/help",
+    href: "/setting",
   },
 ];
 
 export default function SettingScreen() {
   const navigation = useNavigation();
   const router = useRouter();
+  const { theme, themeColors, toggleTheme } = useTheme();
 
   const openDrawer = () => {
     (navigation as any).openDrawer();
@@ -62,21 +56,63 @@ export default function SettingScreen() {
             الإعدادات
           </AppText>
           <Pressable onPress={openDrawer}>
-            <Ionicons name="chevron-back-outline" size={32} />
+            <Ionicons
+              name="chevron-back-outline"
+              size={32}
+              color={themeColors.text}
+            />
           </Pressable>
         </View>
 
-        {/* cards container */}
+        {/* Theme Settings Card */}
+        <AppCard style={styles.themeCard}>
+          <View style={styles.themeHeader}>
+            <Ionicons
+              name="color-palette-outline"
+              size={24}
+              color={themeColors.primary}
+            />
+            <AppText variant="subTitle">مظهر التطبيق</AppText>
+          </View>
+
+          <View style={styles.themeButtonsRow}>
+            <ThemeButton
+              icon="sunny-outline"
+              label="فاتح"
+              isSelected={theme === "light"}
+              onPress={() => toggleTheme("light")}
+            />
+            <ThemeButton
+              icon="moon-outline"
+              label="داكن"
+              isSelected={theme === "dark"}
+              onPress={() => toggleTheme("dark")}
+            />
+            <ThemeButton
+              icon="phone-portrait-outline"
+              label="تلقائي"
+              isSelected={theme === "system"}
+              onPress={() => toggleTheme("system")}
+            />
+          </View>
+        </AppCard>
+
+        {/* other settings cards */}
         <View style={styles.settingsList}>
-          {settings.map((setting) => (
+          {otherSettings.map((setting) => (
             <AppCard key={setting.label} style={styles.settingCard}>
               <View style={styles.settingRow}>
                 {/* Icon box — right side (RTL) */}
-                <View style={styles.iconBox}>
+                <View
+                  style={[
+                    styles.iconBox,
+                    { backgroundColor: themeColors.primarySubtle },
+                  ]}
+                >
                   <Ionicons
                     name={setting.icon}
                     size={22}
-                    color={colors.light.primary}
+                    color={themeColors.primary}
                   />
                 </View>
 
@@ -90,19 +126,22 @@ export default function SettingScreen() {
                   <Ionicons
                     name="chevron-back-outline"
                     size={30}
-                    color={colors.light.text}
+                    color={themeColors.textSecondary}
                   />
                 </Pressable>
               </View>
             </AppCard>
           ))}
         </View>
+
         {/* logout Button */}
         <AppButton
           title="تسجيل الخروج"
           variant="danger"
           style={{ marginTop: spacing.lg }}
-          onPress={() => {}} icon="log-out-outline" />
+          onPress={() => {}}
+          icon="log-out-outline"
+        />
       </ScrollView>
     </AppSafeAreaView>
   );
@@ -124,28 +163,26 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlign: "center",
   },
-  settingsCard: {
-    marginBottom: spacing.md,
-  },
-  settingTitle: {
-    fontFamily: fontFamily.sansExtraBold,
-    fontSize: fontSize.subTitle,
-    marginBottom: spacing.md,
-  },
-  settingsCards: {
+  themeCard: {
+    padding: spacing.md,
     gap: spacing.md,
-    marginBottom: spacing.md,
   },
-  /* List wrapper with gap between cards */
+  themeHeader: {
+    flexDirection: "row-reverse",
+    alignItems: "center",
+    gap: spacing.sm,
+  },
+  themeButtonsRow: {
+    flexDirection: "row-reverse",
+    gap: spacing.sm,
+  },
   settingsList: {
     gap: spacing.sm,
   },
-  /* Individual card per row */
   settingCard: {
     paddingHorizontal: 0,
     paddingVertical: spacing.md,
   },
-  /* Row layout inside each card */
   settingRow: {
     flexDirection: "row-reverse",
     alignItems: "center",
@@ -153,19 +190,15 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.md,
     gap: spacing.md,
   },
-  /* Tinted icon container */
   iconBox: {
     width: 40,
     height: 40,
     borderRadius: 10,
-    backgroundColor: colors.light.primarySubtle,
     alignItems: "center",
     justifyContent: "center",
   },
-  /* Label grows to fill space */
   settingLabel: {
     flex: 1,
     textAlign: "right",
-    color: colors.light.text,
   },
 });
