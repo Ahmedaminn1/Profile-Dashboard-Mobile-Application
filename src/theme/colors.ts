@@ -1,21 +1,21 @@
 // ─── Light Accent — Amber / Gold ─────────────────────────────────────────────
 const lightAccent = {
-  default: "#F59E0B", // primary actions, active states
-  subtle: "#FEF3C7", // tinted backgrounds
-  subtleText: "#92400E", // text on subtle bg
+  default: "#F59E0B",
+  subtle: "#FEF3C7",
+  subtleText: "#92400E",
 } as const;
 
 // ─── Dark Accent — Emerald Green ─────────────────────────────────────────────
 const darkAccent = {
-  default: "#34D399", // primary actions, active states
-  subtle: "#064E3B", // tinted backgrounds
-  subtleText: "#6EE7B7", // text on subtle bg
+  default: "#34D399",
+  subtle: "#064E3B",
+  subtleText: "#6EE7B7",
 } as const;
 
 // ─── Neutrals ─────────────────────────────────────────────────────────────────
 const neutral = {
   0: "#FFFFFF",
-  50: "#FAFAF7", // creamy white — light bg
+  50: "#FAFAF7",
   100: "#F3F1EC",
   200: "#E5E2DA",
   300: "#CCC8BE",
@@ -24,7 +24,7 @@ const neutral = {
   600: "#4B4843",
   700: "#2E2C29",
   800: "#1C1A17",
-  900: "#0D1117", // GitHub-style dark — dark bg
+  900: "#0D1117",
   1000: "#000000",
 } as const;
 
@@ -55,9 +55,9 @@ export const colors = {
     primarySubtle: lightAccent.subtle,
 
     // Surfaces
-    background: neutral[50], // كريمي
-    surface: neutral[0], // أبيض نقي للكارد
-    surfaceRaised: neutral[100], // overlays / modals
+    background: neutral[50],
+    surface: neutral[0],
+    surfaceRaised: neutral[100],
 
     // Text
     text: neutral[900],
@@ -82,9 +82,9 @@ export const colors = {
     primarySubtle: darkAccent.subtle,
 
     // Surfaces
-    background: neutral[900], // #0D1117 GitHub style
-    surface: neutral[800], // #1C1A17
-    surfaceRaised: neutral[700], // #2E2C29
+    background: neutral[900],
+    surface: neutral[800],
+    surfaceRaised: neutral[700],
 
     // Text
     text: neutral[50],
