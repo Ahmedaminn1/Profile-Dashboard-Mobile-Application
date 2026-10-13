@@ -1,91 +1,107 @@
-const accent = {
-  default:  '#2563EB', // primary actions, active states
-  subtle:   '#DBEAFE', // light-mode tinted backgrounds (use sparingly)
-  subtleDark: '#1E3A5F', // dark-mode tinted backgrounds (use sparingly)
+// ─── Light Accent — Amber / Gold ─────────────────────────────────────────────
+const lightAccent = {
+  default:    '#F59E0B', // primary actions, active states
+  subtle:     '#FEF3C7', // tinted backgrounds
+  subtleText: '#92400E', // text on subtle bg
 } as const
 
-// ─── Neutrals — cool grey, consistent temperature ───────────────────────────
+// ─── Dark Accent — Emerald Green ─────────────────────────────────────────────
+const darkAccent = {
+  default:    '#34D399', // primary actions, active states
+  subtle:     '#064E3B', // tinted backgrounds
+  subtleText: '#6EE7B7', // text on subtle bg
+} as const
+
+// ─── Neutrals ─────────────────────────────────────────────────────────────────
 const neutral = {
-  0:   '#FFFFFF',
-  50:  '#F8F9FA',
-  100: '#F1F3F5',
-  200: '#E8EAED',
-  300: '#D1D5DB',
-  400: '#9CA3AF',
-  500: '#6B7280',
-  600: '#4B5563',
-  700: '#374151',
-  800: '#1F2937',
-  900: '#111827',
+  0:    '#FFFFFF',
+  50:   '#FAFAF7', // creamy white — light bg
+  100:  '#F3F1EC',
+  200:  '#E5E2DA',
+  300:  '#CCC8BE',
+  400:  '#9C9890',
+  500:  '#6E6A63',
+  600:  '#4B4843',
+  700:  '#2E2C29',
+  800:  '#1C1A17',
+  900:  '#0D1117', // GitHub-style dark — dark bg
   1000: '#000000',
 } as const
 
-// ─── Semantic — meaning only, never decoration ───────────────────────────────
+// ─── Semantic ─────────────────────────────────────────────────────────────────
 const semantic = {
-  success:        '#16A34A',
-  successSubtle:  '#DCFCE7',
-  danger:         '#DC2626',
-  dangerSubtle:   '#FEE2E2',
-  warning:        '#D97706',
-  warningSubtle:  '#FEF3C7',
-  grayLight : '#7B7B7B'
+  // Light semantic
+  successLight:       '#16A34A',
+  successSubtleLight: '#DCFCE7',
+  dangerLight:        '#DC2626',
+  dangerSubtleLight:  '#FEE2E2',
+  warningLight:       '#D97706',
+  warningSubtleLight: '#FEF3C7',
+
+  // Dark semantic
+  successDark:       '#4ADE80',
+  successSubtleDark: '#14532D',
+  dangerDark:        '#F87171',
+  dangerSubtleDark:  '#7F1D1D',
+  warningDark:       '#FCD34D',
+  warningSubtleDark: '#78350F',
 } as const
 
-// ─── Composed theme tokens ───────────────────────────────────────────────────
+// ─── Composed theme tokens ─────────────────────────────────────────────────────
 export const colors = {
   light: {
     // Accent
-    primary:          accent.default,
-    primarySubtle:    accent.subtle,
+    primary:       lightAccent.default,
+    primarySubtle: lightAccent.subtle,
 
     // Surfaces
-    background:       neutral[0],
-    surface:          neutral[50],
-    surfaceRaised:    neutral[100], // use only for true overlays (modals, popovers)
+    background:    neutral[50],   // كريمي
+    surface:       neutral[0],    // أبيض نقي للكارد
+    surfaceRaised: neutral[100],  // overlays / modals
 
     // Text
-    text:             neutral[900],
-    textSecondary:    neutral[500],
-    textDisabled:     neutral[400],
-    textLight : semantic.grayLight,
+    text:          neutral[900],
+    textSecondary: neutral[500],
+    textDisabled:  neutral[400],
+    textLight:     neutral[400],
 
     // Borders
-    border:           neutral[200],
+    border:        neutral[200],
 
     // Semantic
-    success:          semantic.success,
-    successSubtle:    semantic.successSubtle,
-    danger:           semantic.danger,
-    dangerSubtle:     semantic.dangerSubtle,
-    warning:          semantic.warning,
-    warningSubtle:    semantic.warningSubtle,
+    success:       semantic.successLight,
+    successSubtle: semantic.successSubtleLight,
+    danger:        semantic.dangerLight,
+    dangerSubtle:  semantic.dangerSubtleLight,
+    warning:       semantic.warningLight,
+    warningSubtle: semantic.warningSubtleLight,
   },
   dark: {
     // Accent
-    primary:          '#3B82F6', // slightly lighter for contrast on dark bg
-    primarySubtle:    accent.subtleDark,
+    primary:       darkAccent.default,
+    primarySubtle: darkAccent.subtle,
 
     // Surfaces
-    background:       neutral[900],
-    surface:          neutral[800],
-    surfaceRaised:    neutral[700],
+    background:    neutral[900],  // #0D1117 GitHub style
+    surface:       neutral[800],  // #1C1A17
+    surfaceRaised: neutral[700],  // #2E2C29
 
     // Text
-    text:             neutral[50],
-    textSecondary:    neutral[400],
-    textDisabled:     neutral[600],
-    textLight:        neutral[400],
+    text:          neutral[50],
+    textSecondary: neutral[400],
+    textDisabled:  neutral[600],
+    textLight:     neutral[400],
 
     // Borders
-    border:           neutral[700],
+    border:        neutral[700],
 
     // Semantic
-    success:          '#4ADE80',
-    successSubtle:    '#14532D',
-    danger:           '#F87171',
-    dangerSubtle:     '#7F1D1D',
-    warning:          '#FCD34D',
-    warningSubtle:    '#78350F',
+    success:       semantic.successDark,
+    successSubtle: semantic.successSubtleDark,
+    danger:        semantic.dangerDark,
+    dangerSubtle:  semantic.dangerSubtleDark,
+    warning:       semantic.warningDark,
+    warningSubtle: semantic.warningSubtleDark,
   },
 } as const
 
