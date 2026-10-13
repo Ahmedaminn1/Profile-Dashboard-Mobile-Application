@@ -1,107 +1,109 @@
-// ─── Light Accent — Indigo ────────────────────────────────────────────────────
+// ─── Light Accent — Amber / Gold ─────────────────────────────────────────────
 const lightAccent = {
-  default: '#4F46E5', // Indigo-600
-  subtle:  '#EEF2FF', // Indigo-50
-} as const
+  default: "#F59E0B", // primary actions, active states
+  subtle: "#FEF3C7", // tinted backgrounds
+  subtleText: "#92400E", // text on subtle bg
+} as const;
 
-// ─── Dark Accent — Indigo (lighter for contrast) ───────────────────────────────
+// ─── Dark Accent — Emerald Green ─────────────────────────────────────────────
 const darkAccent = {
-  default: '#818CF8', // Indigo-400
-  subtle:  '#1E1B4B', // Indigo-950
-} as const
+  default: "#34D399", // primary actions, active states
+  subtle: "#064E3B", // tinted backgrounds
+  subtleText: "#6EE7B7", // text on subtle bg
+} as const;
 
-// ─── Slate Neutrals ───────────────────────────────────────────────────────────
-const slate = {
-  0:    '#FFFFFF',
-  50:   '#F8FAFC',
-  100:  '#F1F5F9',
-  200:  '#E2E8F0',
-  300:  '#CBD5E1',
-  400:  '#94A3B8',
-  500:  '#64748B',
-  600:  '#475569',
-  700:  '#334155',
-  800:  '#1E293B',
-  900:  '#0F172A',
-  1000: '#000000',
-} as const
+// ─── Neutrals ─────────────────────────────────────────────────────────────────
+const neutral = {
+  0: "#FFFFFF",
+  50: "#FAFAF7", // creamy white — light bg
+  100: "#F3F1EC",
+  200: "#E5E2DA",
+  300: "#CCC8BE",
+  400: "#9C9890",
+  500: "#6E6A63",
+  600: "#4B4843",
+  700: "#2E2C29",
+  800: "#1C1A17",
+  900: "#0D1117", // GitHub-style dark — dark bg
+  1000: "#000000",
+} as const;
 
 // ─── Semantic ─────────────────────────────────────────────────────────────────
 const semantic = {
-  // Light
-  successLight:       '#16A34A',
-  successSubtleLight: '#DCFCE7',
-  dangerLight:        '#DC2626',
-  dangerSubtleLight:  '#FEE2E2',
-  warningLight:       '#D97706',
-  warningSubtleLight: '#FEF3C7',
+  // Light semantic
+  successLight: "#16A34A",
+  successSubtleLight: "#DCFCE7",
+  dangerLight: "#DC2626",
+  dangerSubtleLight: "#FEE2E2",
+  warningLight: "#D97706",
+  warningSubtleLight: "#FEF3C7",
 
-  // Dark
-  successDark:       '#4ADE80',
-  successSubtleDark: '#14532D',
-  dangerDark:        '#F87171',
-  dangerSubtleDark:  '#7F1D1D',
-  warningDark:       '#FCD34D',
-  warningSubtleDark: '#78350F',
-} as const
+  // Dark semantic
+  successDark: "#4ADE80",
+  successSubtleDark: "#14532D",
+  dangerDark: "#F87171",
+  dangerSubtleDark: "#7F1D1D",
+  warningDark: "#FCD34D",
+  warningSubtleDark: "#78350F",
+} as const;
 
 // ─── Composed theme tokens ─────────────────────────────────────────────────────
 export const colors = {
   light: {
     // Accent
-    primary:       lightAccent.default,
+    primary: lightAccent.default,
     primarySubtle: lightAccent.subtle,
 
     // Surfaces
-    background:    slate[0],    // أبيض نقي
-    surface:       slate[50],   // رمادي ناعم جداً
-    surfaceRaised: slate[100],  // overlays / modals
+    background: neutral[50], // كريمي
+    surface: neutral[0], // أبيض نقي للكارد
+    surfaceRaised: neutral[100], // overlays / modals
 
     // Text
-    text:          slate[900],
-    textSecondary: slate[500],
-    textDisabled:  slate[400],
-    textLight:     slate[400],
+    text: neutral[900],
+    textSecondary: neutral[500],
+    textDisabled: neutral[400],
+    textLight: neutral[400],
 
     // Borders
-    border:        slate[200],
+    border: neutral[200],
 
     // Semantic
-    success:       semantic.successLight,
+    success: semantic.successLight,
     successSubtle: semantic.successSubtleLight,
-    danger:        semantic.dangerLight,
-    dangerSubtle:  semantic.dangerSubtleLight,
-    warning:       semantic.warningLight,
+    danger: semantic.dangerLight,
+    dangerSubtle: semantic.dangerSubtleLight,
+    warning: semantic.warningLight,
     warningSubtle: semantic.warningSubtleLight,
   },
   dark: {
     // Accent
-    primary:       darkAccent.default,
+    primary: darkAccent.default,
     primarySubtle: darkAccent.subtle,
 
     // Surfaces
-    background:    slate[900],  // #0F172A — Slate داكن
-    surface:       slate[800],  // #1E293B
-    surfaceRaised: slate[700],  // #334155
+    background: neutral[900], // #0D1117 GitHub style
+    surface: neutral[800], // #1C1A17
+    surfaceRaised: neutral[700], // #2E2C29
 
     // Text
-    text:          slate[50],
-    textSecondary: slate[400],
-    textDisabled:  slate[600],
-    textLight:     slate[400],
+    text: neutral[50],
+    textSecondary: neutral[400],
+    textDisabled: neutral[600],
+    textLight: neutral[400],
 
     // Borders
-    border:        slate[700],
+    border: neutral[700],
 
     // Semantic
-    success:       semantic.successDark,
+    success: semantic.successDark,
     successSubtle: semantic.successSubtleDark,
-    danger:        semantic.dangerDark,
-    dangerSubtle:  semantic.dangerSubtleDark,
-    warning:       semantic.warningDark,
+    danger: semantic.dangerDark,
+    dangerSubtle: semantic.dangerSubtleDark,
+    warning: semantic.warningDark,
     warningSubtle: semantic.warningSubtleDark,
   },
-} as const
+} as const;
 
-export type ThemeMode = keyof typeof colors
-export type ColorToken = keyof typeof colors.light
+export type ThemeMode = keyof typeof colors;
+export type ColorToken = keyof typeof colors.light;
