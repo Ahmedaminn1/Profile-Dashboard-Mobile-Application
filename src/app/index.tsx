@@ -16,6 +16,7 @@ import AppCard from "@/components/AppCard";
 import AppSafeAreaView from "@/components/AppSafeAreaView";
 import { useTheme } from "@/context/ThemeContext";
 import { useSkills } from "@/context/SkillsContext";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Index() {
   const navigation = useNavigation();
@@ -26,9 +27,20 @@ export default function Index() {
     (navigation as any).openDrawer();
   };
 
-  const AvatarURL =
-    "https://6ac3a452ae1f22aea6d19b75.imgix.net/sandbox/ahmed%20amin%20pic.jpeg?auto=compress";
+  const AvatarURL = "https://6ac3a452ae1f22aea6d19b75.imgix.net/sandbox/ahmed%20amin%20pic.jpeg?auto=compress";
+  const { authSession} = useAuth();
 
+
+  const res = async () => await fetch("http://localhost:3000/api/userSkills" , {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${authSession?.token}`,
+    },
+  });
+  // console.log(res());
+
+  
   return (
     <AppSafeAreaView>
       {/* Top Bar */}
@@ -40,26 +52,15 @@ export default function Index() {
         <View style={styles.topBarActions}>
           {/* Quick Light/Dark Toggle */}
           <Pressable onPress={toggleLightDark} style={styles.iconButton}>
-            <Ionicons
-              name={isDark ? "sunny-outline" : "moon-outline"}
-              size={26}
-              color={themeColors.text}
-            />
+            <Ionicons name={isDark ? "sunny-outline" : "moon-outline"} size={26} color={themeColors.text}/>
           </Pressable>
 
           {/* Notifications */}
           <Pressable
             onPress={() => router.push("/setting/notifications")}
-            style={styles.notificationWrapper}
-          >
-            <Ionicons
-              name="notifications-outline"
-              size={30}
-              color={themeColors.text}
-            />
-            <View
-              style={[styles.dot, { backgroundColor: themeColors.danger }]}
-            />
+            style={styles.notificationWrapper}>
+            <Ionicons name="notifications-outline" size={30} color={themeColors.text}/>
+            <View style={[styles.dot, { backgroundColor: themeColors.danger }]}/>
           </Pressable>
         </View>
       </View>
@@ -67,24 +68,15 @@ export default function Index() {
       <ScrollView style={styles.content}>
         {/* Profile Section */}
         <View style={styles.profileSection}>
-          <Avatar size={124} userName="Ahmed Amin" uri={AvatarURL} />
+          <Avatar size={124} userName={authSession?.user?.name ?? ""} uri={authSession?.user?.avatar || AvatarURL} />
 
           <View style={styles.userInfo}>
-            <AppText variant="title">أحمد أمين</AppText>
-            <AppText
-              style={[styles.job, { color: themeColors.textSecondary }]}
-              variant="subTitle"
-            >
-              مهندس برمجيات
+            <AppText variant="title">{authSession?.user?.name}</AppText>
+            <AppText style={[styles.job, { color: themeColors.textSecondary }]} variant="subTitle">
+              {authSession?.user?.email}
             </AppText>
-            <AppButton
-              style={{ paddingHorizontal: spacing.lg }}
-              title="عرض المهارات"
-              onPress={() => {
-                router.push("/skills");
-              }}
-              icon="create-outline"
-            />
+            <AppButton style={{ paddingHorizontal: spacing.lg }} title="عرض المهارات" onPress={() => router.push("/skills")}
+              icon="create-outline"/>
           </View>
         </View>
 
@@ -97,24 +89,12 @@ export default function Index() {
 
         {/* About Card */}
         <AppCard style={styles.aboutCard}>
-          <View
-            style={[
-              styles.aboutCardIcon,
-              { backgroundColor: themeColors.primarySubtle },
-            ]}
-          >
-            <Ionicons
-              name="information-circle-outline"
-              size={45}
-              color={themeColors.primary}
-            />
+          <View style={[styles.aboutCardIcon,{ backgroundColor: themeColors.primarySubtle },]}>
+            <Ionicons name="information-circle-outline" size={45} color={themeColors.primary}/>
           </View>
           <View style={styles.aboutCardContent}>
             <AppText variant="title">نبذة عني</AppText>
-            <AppText
-              style={[styles.description, { color: themeColors.text }]}
-              variant="body"
-            >
+            <AppText style={[styles.description, { color: themeColors.text }]} variant="body">
               أحمد أمين مهندس برمجيات حاصل على بكالوريوس في علوم الحاسب. لدي
               خبرة في تطوير الويب وتطبيقات الهاتف المحمول.
             </AppText>
@@ -123,29 +103,14 @@ export default function Index() {
 
         {/* Quick Actions Footer */}
         <AppCard style={styles.actionsCard}>
-          <AppText variant="subTitle" style={styles.actionsTitle}>
-            اجراءات سريعة
-          </AppText>
+          <AppText variant="subTitle" style={styles.actionsTitle}>اجراءات سريعة</AppText>
 
           <View style={styles.actionsList}>
             <View style={styles.actionItem}>
-              <AppButton
-                title="المهارات"
-                onPress={() => {
-                  router.push("/skills");
-                }}
-                icon="code-slash-outline"
-              />
+              <AppButton title="المهارات" onPress={() => router.push("/skills")} icon="code-slash-outline"/>
             </View>
             <View style={styles.actionItem}>
-              <AppButton
-                variant="outlined"
-                title="الاعدادات"
-                onPress={() => {
-                  router.push("/setting");
-                }}
-                icon="settings-outline"
-              />
+              <AppButton variant="outlined" title="الاعدادات" onPress={() => router.push("/setting")} icon="settings-outline"/>
             </View>
           </View>
         </AppCard>
