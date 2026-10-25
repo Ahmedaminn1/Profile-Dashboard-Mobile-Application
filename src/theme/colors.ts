@@ -75,6 +75,10 @@ export const colors = {
     dangerSubtle: semantic.dangerSubtleLight,
     warning: semantic.warningLight,
     warningSubtle: semantic.warningSubtleLight,
+
+    // Error semantic
+    error: semantic.dangerLight,
+    errorSubtle: semantic.dangerSubtleLight,
   },
   dark: {
     // Accent
