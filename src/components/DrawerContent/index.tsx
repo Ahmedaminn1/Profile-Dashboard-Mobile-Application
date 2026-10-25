@@ -6,25 +6,30 @@ import AppText from "../AppText";
 import AppButton from "../AppButton";
 import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "@/context/ThemeContext";
+import { useAuth } from "@/context/AuthContext";
 
 export const CustomDrawerContent = (props: any) => {
   const { themeColors } = useTheme();
+  const { logout, authSession } = useAuth();
   const AvatarURL =
     "https://6ac3a452ae1f22aea6d19b75.imgix.net/sandbox/ahmed%20amin%20pic.jpeg?auto=compress";
 
   return (
     <DrawerContentScrollView
       {...props}
-      contentContainerStyle={[
-        styles.container,
-        { backgroundColor: themeColors.background },
-      ]}
-    >
+      contentContainerStyle={[styles.container,{ backgroundColor: themeColors.background },]}>
+
       <View style={styles.profile}>
-        <Avatar size={124} userName="Ahmed Amin" uri={AvatarURL} />
-        <AppText variant="title">أحمد أمين</AppText>
-        <AppText variant="body">مهندس برمجيات</AppText>
-        <AppText variant="caption">القاهرة، مصر</AppText>
+        <Avatar
+          size={124}
+          userName={authSession?.user?.name || "Ahmed Amin"}
+          uri={authSession?.user?.avatar || AvatarURL}/>
+        <AppText variant="title">
+          {authSession?.user?.name || "أحمد أمين"}
+        </AppText>
+        <AppText variant="body">
+          {authSession?.user?.email || "مهندس برمجيات"}
+        </AppText>
       </View>
 
       {/* Drawer Items with Icons */}
@@ -40,7 +45,7 @@ export const CustomDrawerContent = (props: any) => {
         <AppButton
           title="تسجيل الخروج"
           variant="danger"
-          onPress={() => {}}
+          onPress={() => logout()}
           icon="log-out-outline"
         />
         <AppText
