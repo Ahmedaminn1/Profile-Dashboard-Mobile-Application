@@ -9,6 +9,8 @@ import { spacing } from "@/theme/spacing";
 import { CustomDrawerContent } from "@/components/DrawerContent";
 import { ThemeProvider, useTheme } from "@/context/ThemeContext";
 import { SkillsProvider } from "@/context/SkillsContext";
+import { AuthProvider, useAuth } from "@/context/AuthContext";
+import LoginScreen from "@/components/LoginScreen";
 
 function AppDrawer() {
   const { themeColors } = useTheme();
@@ -35,9 +37,7 @@ function AppDrawer() {
         headerTitleStyle: {
           fontFamily: fontFamily.sansBold,
         },
-        headerTitleAlign: "center",
-      }}
-    >
+        headerTitleAlign: "center",}}>
       <Drawer.Screen
         name="index"
         options={{
@@ -52,9 +52,7 @@ function AppDrawer() {
                 size={32}
                 color={themeColors.primary}
               />
-            </View>
-          ),
-        }}
+            </View>),}}
       />
 
       <Drawer.Screen
@@ -71,10 +69,7 @@ function AppDrawer() {
                 size={32}
                 color={themeColors.primary}
               />
-            </View>
-          ),
-        }}
-      />
+            </View>),}}/>
 
       <Drawer.Screen
         name="setting"
@@ -90,12 +85,30 @@ function AppDrawer() {
                 size={32}
                 color={themeColors.primary}
               />
-            </View>
-          ),
-        }}
-      />
-    </Drawer>
-  );
+            </View>),}}/>
+    </Drawer>);
+}
+
+function RootContent() {
+  const { isAuthenticated, isLoading } = useAuth();
+  console.log(isAuthenticated)
+  if (isLoading) {
+    return (
+      <View style={styles.loading}>
+        <ActivityIndicator size="large" color="#2563EB" />
+      </View>
+    );
+  }
+
+  if (isAuthenticated) {
+    return (
+      <SkillsProvider>
+        <AppDrawer />
+      </SkillsProvider>
+    );
+  }
+
+  return <LoginScreen />;
 }
 
 export default function RootLayout() {
@@ -110,13 +123,13 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider>
-      <SkillsProvider>
-        <GestureHandlerRootView style={{ flex: 1 }}>
-          <AppDrawer />
-        </GestureHandlerRootView>
-      </SkillsProvider>
-    </ThemeProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <ThemeProvider>
+        <AuthProvider>
+          <RootContent />
+        </AuthProvider>
+      </ThemeProvider>
+    </GestureHandlerRootView>
   );
 }
 
