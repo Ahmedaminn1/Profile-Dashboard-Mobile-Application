@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import AppSafeAreaView from "@/components/AppSafeAreaView";
 import { StyleSheet } from "react-native";
-import { spacing } from "@/theme/spacing";
+import { spacing, radius } from "@/theme/spacing";
 import AppText from "@/components/AppText";
 import AppCard from "@/components/AppCard";
 import { Ionicons } from "@expo/vector-icons";
@@ -382,16 +382,16 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   iconBox: {
-    width: 52,
-    height: 52,
-    borderRadius: 18,
+    width: 48,
+    height: 48,
+    borderRadius: radius.lg,       // 12px — consistent
     alignItems: "center",
     justifyContent: "center",
   },
   addButton: {
     width: 40,
     height: 40,
-    borderRadius: 12,
+    borderRadius: radius.lg,       // 12px
     alignItems: "center",
     justifyContent: "center",
   },
@@ -432,7 +432,7 @@ const styles = StyleSheet.create({
   },
   modalCard: {
     width: "100%",
-    borderRadius: 20,
+    borderRadius: radius.xl,       // 16px — modal bottom sheet
     padding: spacing.lg,
     gap: spacing.sm,
   },
@@ -447,7 +447,7 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    borderRadius: 10,
+    borderRadius: radius.lg,       // 12px
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.sm,
     fontSize: fontSize.md,
@@ -462,7 +462,7 @@ const styles = StyleSheet.create({
   optionChip: {
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.xs,
-    borderRadius: 20,
+    borderRadius: radius.lg,       // 12px — consistent chip shape
     borderWidth: 1,
   },
 });

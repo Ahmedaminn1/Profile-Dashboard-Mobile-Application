@@ -266,7 +266,7 @@ const styles = StyleSheet.create({
   iconBox: {
     width: 40,
     height: 40,
-    borderRadius: 10,
+    borderRadius: 8,               // radius.md
     alignItems: "center",
     justifyContent: "center",
   },

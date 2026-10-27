@@ -246,7 +246,7 @@ const styles = StyleSheet.create({
   toggleIcon: {
     width: 36,
     height: 36,
-    borderRadius: 10,
+    borderRadius: 8,               // radius.md
     alignItems: "center",
     justifyContent: "center",
   },

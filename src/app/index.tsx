@@ -8,7 +8,7 @@ import AppText from "@/components/AppText";
 import AppButton from "@/components/AppButton";
 import StatCard from "@/components/StatCard";
 import Avatar from "@/components/Avatar";
-import { spacing } from "@/theme/spacing";
+import { spacing, radius } from "@/theme/spacing";
 import { fontFamily, fontSize } from "@/theme/typography";
 import { Ionicons } from "@expo/vector-icons";
 import { router, useNavigation } from "expo-router";
@@ -153,9 +153,9 @@ const styles = StyleSheet.create({
     padding: spacing.xs,
   },
   dot: {
-    width: 10,
-    height: 10,
-    borderRadius: 50,
+    width: 8,
+    height: 8,
+    borderRadius: radius.full,     // circular notification dot
     position: "absolute",
     top: 3,
     right: 3,
@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   job: {
-    fontSize: 18,
+    fontSize: fontSize.lg,         // 20px — strict scale (was 18, violates Rule 4)
     marginBottom: spacing.md,
     fontFamily: fontFamily.sansBold,
   },
@@ -190,9 +190,9 @@ const styles = StyleSheet.create({
   aboutCardIcon: {
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 32,
-    width: 82,
-    height: 82,
+    borderRadius: 24,              // radius token between md(8) and full, for round icon container
+    width: 80,
+    height: 80,
   },
   aboutCardContent: {
     flex: 1,

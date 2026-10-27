@@ -316,7 +316,7 @@ const styles = StyleSheet.create({
   versionIcon: {
     width: 64,
     height: 64,
-    borderRadius: 18,
+    borderRadius: 12,              // radius.lg
     alignItems: "center",
     justifyContent: "center",
     marginBottom: spacing.xs,
@@ -347,7 +347,7 @@ const styles = StyleSheet.create({
   contactIcon: {
     width: 36,
     height: 36,
-    borderRadius: 10,
+    borderRadius: 8,               // radius.md
     alignItems: "center",
     justifyContent: "center",
   },
