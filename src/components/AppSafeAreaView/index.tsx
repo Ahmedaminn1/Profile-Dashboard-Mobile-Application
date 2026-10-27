@@ -1,11 +1,11 @@
-import { StatusBar, StatusBarStyle, StyleSheet, ViewStyle } from "react-native";
+import { StatusBar, StatusBarStyle, StyleProp, StyleSheet, ViewStyle } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useTheme } from "@/context/ThemeContext";
 
 interface AppSafeAreaProps {
   children: React.ReactNode;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
   barStyle?: StatusBarStyle;
 }
 
