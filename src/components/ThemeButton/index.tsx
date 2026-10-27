@@ -1,5 +1,5 @@
-﻿import React from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import React from 'react';
+import { Pressable, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import AppText from '@/components/AppText';
 import { useTheme } from '@/context/ThemeContext';
@@ -21,20 +21,20 @@ export default function ThemeButton({ icon, label, isSelected, onPress }: ThemeB
       style={[
         styles.button,
         {
-          backgroundColor: isSelected ? themeColors.primary : themeColors.surfaceRaised,
+          backgroundColor: isSelected ? themeColors.primarySubtle : themeColors.surface,
           borderColor: isSelected ? themeColors.primary : themeColors.border,
         },
       ]}
     >
       <Ionicons
         name={icon}
-        size={24}
-        color={isSelected ? '#FFFFFF' : themeColors.textSecondary}
+        size={22}
+        color={isSelected ? themeColors.primary : themeColors.textSecondary}
       />
       <AppText
         style={{
-          color: isSelected ? '#FFFFFF' : themeColors.textSecondary,
-          fontSize: 13,
+          color: isSelected ? themeColors.primary : themeColors.textSecondary,
+          fontSize: 14,
           marginTop: spacing.xs,
         }}
       >
@@ -49,9 +49,9 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: spacing.sm,
-    borderRadius: radius.md,
-    borderWidth: 2,
-    gap: 4,
+    paddingVertical: spacing.md,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    gap: spacing.xs,
   },
 });

@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet } from "react-native";
 import AppText from "../AppText";
-import { spacing } from "@/theme/spacing";
+import { radius, spacing } from "@/theme/spacing";
 import { useTheme } from "@/context/ThemeContext";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -24,7 +24,7 @@ export default function AppButton({
 
   const textColorMap: Record<Exclude<AppButtonProps["variant"], undefined>, string> = {
     primary: "#FFFFFF",
-    outlined: themeColors.primary,
+    outlined: themeColors.text,
     danger: themeColors.danger,
     success: themeColors.success,
     warning: themeColors.warning,
@@ -33,26 +33,28 @@ export default function AppButton({
   const variantStyles = {
     primary: {
       backgroundColor: themeColors.primary,
+      borderColor: themeColors.primary,
+      borderWidth: 1,
     },
     outlined: {
-      backgroundColor: themeColors.background,
-      borderWidth: 2,
-      borderColor: themeColors.primary,
+      backgroundColor: themeColors.surface,
+      borderWidth: 1,
+      borderColor: themeColors.border,
     },
     danger: {
-      backgroundColor: themeColors.background,
+      backgroundColor: themeColors.surface,
       borderColor: themeColors.danger,
-      borderWidth: 2,
+      borderWidth: 1,
     },
     success: {
-      backgroundColor: themeColors.background,
+      backgroundColor: themeColors.surface,
       borderColor: themeColors.success,
-      borderWidth: 2,
+      borderWidth: 1,
     },
     warning: {
-      backgroundColor: themeColors.background,
+      backgroundColor: themeColors.surface,
       borderColor: themeColors.warning,
-      borderWidth: 2,
+      borderWidth: 1,
     },
   };
 
@@ -63,26 +65,26 @@ export default function AppButton({
         styles.base,
         variantStyles[variant],
         style,
-        { opacity: pressed ? 0.8 : 1 },
+        { opacity: pressed ? 0.85 : 1 },
       ]}
     >
       <AppText variant="button" style={{ color: textColorMap[variant] }}>
         {title}
       </AppText>
-      {icon && <Ionicons name={icon} size={24} color={textColorMap[variant]} />}
+      {icon && <Ionicons name={icon} size={20} color={textColorMap[variant]} />}
     </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
   base: {
-    borderRadius: 18,
+    borderRadius: radius.lg,
     flexDirection: "row",
     gap: spacing.sm,
     justifyContent: "center",
     alignItems: "center",
-    minHeight: 58,
-    paddingHorizontal: spacing.xl,
+    minHeight: 46,
+    paddingHorizontal: spacing.lg,
     paddingVertical: spacing.sm,
   },
 });
