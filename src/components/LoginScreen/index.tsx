@@ -8,19 +8,20 @@ import {
 import React, { useState } from "react";
 import AppCard from "../AppCard";
 import AppSafeAreaView from "../AppSafeAreaView";
-import { colors } from "@/theme/colors";
 import { Ionicons } from "@expo/vector-icons";
 import AppText from "../AppText";
-import { spacing } from "@/theme/spacing";
+import { spacing, radius } from "@/theme/spacing";
 import { fontSize, fontFamily } from "@/theme/typography";
 import AppButton from "../AppButton";
 import { useAuth } from "@/context/AuthContext";
 import { useTranslation } from "react-i18next";
 import { toggleLanguage } from "@/i18n/i18n";
+import { useTheme } from "@/context/ThemeContext";
 
 export default function LoginScreen() {
   const { login, isSubmitting } = useAuth();
   const { t, i18n } = useTranslation();
+  const { themeColors } = useTheme();
   const isRTL = i18n.language === "ar";
   const language = i18n.language;
   const [username, setUsername] = useState<string>("");
@@ -42,11 +43,20 @@ export default function LoginScreen() {
   };
 
   return (
-    <AppSafeAreaView style={styles.safeAreaView}>
+    <AppSafeAreaView style={[styles.safeAreaView, { backgroundColor: themeColors.background }]}>
       {/* Top Language Switcher */}
-      <Pressable onPress={toggleLanguage} style={styles.langToggle}>
-        <Ionicons name="globe-outline" size={20} color={colors.light.primary} />
-        <AppText style={styles.langText}>
+      <Pressable
+        onPress={toggleLanguage}
+        style={[
+          styles.langToggle,
+          {
+            backgroundColor: themeColors.surfaceRaised,
+            borderColor: themeColors.border,
+          },
+        ]}
+      >
+        <Ionicons name="globe-outline" size={20} color={themeColors.primary} />
+        <AppText style={[styles.langText, { color: themeColors.primary }]}>
           {language === "ar" ? "English" : "العربية"}
         </AppText>
       </Pressable>
@@ -55,25 +65,40 @@ export default function LoginScreen() {
         <View>
           <Ionicons
             name="lock-closed"
-            style={styles.lockIcon}
+            style={[
+              styles.lockIcon,
+              {
+                backgroundColor: themeColors.primarySubtle,
+                borderColor: themeColors.border,
+                color: themeColors.primary,
+              },
+            ]}
             size={32}
-            color={colors.light.primary}
+            color={themeColors.primary}
           />
         </View>
-        <AppText style={styles.title} variant="title">
+        <AppText style={[styles.title, { color: themeColors.text }]} variant="title">
           {t("auth.login")}
         </AppText>
-        <AppText style={styles.subTitle} variant="subTitle">
+        <AppText
+          style={[styles.subTitle, { color: themeColors.textSecondary }]}
+          variant="subTitle"
+        >
           {t("auth.enterCredentialsPrompt")}
         </AppText>
 
         <View style={styles.inputContainer}>
           <TextInput
             placeholder={t("auth.usernamePlaceholder")}
-            placeholderTextColor={colors.light.textSecondary}
+            placeholderTextColor={themeColors.textSecondary}
             style={[
               styles.input,
-              { textAlign: isRTL ? "right" : "left" },
+              {
+                textAlign: isRTL ? "right" : "left",
+                borderColor: themeColors.border,
+                backgroundColor: themeColors.surfaceRaised,
+                color: themeColors.text,
+              },
             ]}
             value={username}
             onChangeText={(text) => {
@@ -86,13 +111,16 @@ export default function LoginScreen() {
           <View style={styles.passwordWrapper}>
             <TextInput
               placeholder={t("auth.passwordPlaceholder")}
-              placeholderTextColor={colors.light.textSecondary}
+              placeholderTextColor={themeColors.textSecondary}
               style={[
                 styles.passwordInput,
                 {
                   textAlign: isRTL ? "right" : "left",
-                  paddingLeft: isRTL ? 42 : 12,
-                  paddingRight: !isRTL ? 42 : 12,
+                  paddingLeft: isRTL ? 42 : spacing.md,
+                  paddingRight: !isRTL ? 42 : spacing.md,
+                  borderColor: themeColors.border,
+                  backgroundColor: themeColors.surfaceRaised,
+                  color: themeColors.text,
                 },
               ]}
               value={password}
@@ -106,14 +134,14 @@ export default function LoginScreen() {
             <Pressable
               style={[
                 styles.eyeIcon,
-                isRTL ? { left: 12 } : { right: 12 },
+                isRTL ? { left: spacing.md } : { right: spacing.md },
               ]}
               onPress={() => setShowPassword((prev) => !prev)}
             >
               <Ionicons
                 name={showPassword ? "eye-off-outline" : "eye-outline"}
                 size={22}
-                color={colors.light.textSecondary}
+                color={themeColors.textSecondary}
               />
             </Pressable>
           </View>
@@ -128,15 +156,15 @@ export default function LoginScreen() {
 
         {error.length > 0 ? (
           <AppText
-            style={[styles.footerText, styles.errorText]}
+            style={[styles.footerText, { color: themeColors.danger }]}
             variant="caption"
           >
             {error}
           </AppText>
         ) : (
-          <AppText style={styles.footerText} variant="caption">
+          <AppText style={[styles.footerText, { color: themeColors.textSecondary }]} variant="caption">
             {language === "ar" ? "لا تمتلك حساب؟ " : "Don't have an account? "}
-            <AppText style={styles.signUpText} variant="caption">
+            <AppText style={{ color: themeColors.primary, textDecorationLine: "underline" }} variant="caption">
               {t("auth.signup")}
             </AppText>
           </AppText>
@@ -145,7 +173,7 @@ export default function LoginScreen() {
           <ActivityIndicator
             style={{ marginTop: spacing.md }}
             size="large"
-            color={colors.light.primary}
+            color={themeColors.primary}
           />
         )}
       </AppCard>
@@ -166,61 +194,52 @@ const styles = StyleSheet.create({
     right: 20,
     flexDirection: "row",
     alignItems: "center",
-    gap: 6,
-    padding: 8,
-    borderRadius: 16,
-    backgroundColor: colors.light.surfaceRaised,
+    gap: spacing.sm,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+    borderRadius: radius.lg,      // 12px
     borderWidth: 1,
-    borderColor: colors.light.border,
   },
   langText: {
-    fontSize: 14,
+    fontSize: fontSize.sm,        // 14px — strict scale
     fontFamily: fontFamily.sansBold,
-    color: colors.light.primary,
   },
   card: {
-    borderRadius: 24,
+    borderRadius: radius.xl,      // 16px — cards can use xl
     width: "100%",
     maxWidth: 360,
     padding: spacing.xl,
     justifyContent: "center",
     alignItems: "stretch",
-    borderColor: colors.light.border,
+    gap: spacing.md,
   },
   lockIcon: {
     alignSelf: "center",
     marginBottom: spacing.md,
     borderWidth: 1,
-    borderColor: colors.light.background,
-    borderRadius: 50,
-    backgroundColor: colors.light.primarySubtle,
-    padding: 16,
+    borderRadius: radius.full,    // circular
+    padding: spacing.md,
     fontSize: 36,
     fontFamily: fontFamily.sans,
-    color: colors.light.primary,
   },
   title: {
-    color: colors.light.text,
     textAlign: "center",
     alignSelf: "center",
   },
   subTitle: {
-    color: colors.light.textSecondary,
     textAlign: "center",
     alignSelf: "center",
-    marginBottom: spacing.md,
   },
   inputContainer: {
     gap: spacing.md,
+    marginTop: spacing.xs,
   },
   input: {
     borderWidth: 1,
-    borderColor: colors.light.border,
-    borderRadius: 12,
-    padding: 12,
-    fontSize: fontSize.lg,
+    borderRadius: radius.lg,      // 12px
+    padding: spacing.md,
+    fontSize: fontSize.base,      // 16px — strict scale (was 20 = fontSize.lg)
     fontFamily: fontFamily.sans,
-    color: colors.light.text,
   },
   passwordWrapper: {
     position: "relative",
@@ -228,12 +247,10 @@ const styles = StyleSheet.create({
   },
   passwordInput: {
     borderWidth: 1,
-    borderColor: colors.light.border,
-    borderRadius: 12,
-    padding: 12,
-    fontSize: fontSize.lg,
+    borderRadius: radius.lg,      // 12px
+    paddingVertical: spacing.md,
+    fontSize: fontSize.base,      // 16px
     fontFamily: fontFamily.sans,
-    color: colors.light.text,
   },
   eyeIcon: {
     position: "absolute",
@@ -241,23 +258,14 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   loginButton: {
-    marginTop: spacing.lg,
-    paddingVertical: spacing.sm,
-    borderRadius: 24,
+    marginTop: spacing.md,
+    borderRadius: radius.lg,      // 12px — consistent (was 24px hardcoded)
   },
   footerText: {
-    marginTop: spacing.lg,
-    color: colors.light.textSecondary,
+    marginTop: spacing.md,
     textAlign: "center",
-    fontSize: fontSize.md,
+    fontSize: fontSize.sm,        // 14px
     fontFamily: fontFamily.sans,
     fontWeight: "bold",
-  },
-  errorText: {
-    color: colors.light.error ?? "red",
-  },
-  signUpText: {
-    color: colors.light.primary,
-    textDecorationLine: "underline",
   },
 });
