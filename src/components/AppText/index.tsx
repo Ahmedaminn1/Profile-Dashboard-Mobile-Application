@@ -45,7 +45,7 @@ export default function AppText({
 
 const styles = StyleSheet.create({
   base: {
-    fontSize: spacing.xl,
+    fontSize: fontSize.base,   // 16px — CLAUDE.md Rule 4 strict scale
     fontFamily: fontFamily.sans,
   },
   title: {

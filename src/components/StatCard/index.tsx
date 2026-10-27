@@ -1,7 +1,7 @@
 import { View, StyleSheet } from 'react-native';
 import React from 'react';
 import AppCard from '../AppCard';
-import { spacing } from '@/theme/spacing';
+import { spacing, radius } from '@/theme/spacing';
 import AppText from '../AppText';
 import { Ionicons } from '@expo/vector-icons';
 import { fontFamily, fontSize } from '@/theme/typography';
@@ -33,7 +33,7 @@ export default function StatCard({
           { backgroundColor: themeColors.primarySubtle },
         ]}
       >
-        <Ionicons name={icon} size={30} color={iconColor} />
+        <Ionicons name={icon} size={28} color={iconColor} />
       </View>
       <AppText
         variant="body"
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
   iconBox: {
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 20,
+    borderRadius: radius.lg,       // 12px — consistent with CLAUDE.md Rule 2
     width: 64,
     height: 64,
     marginBottom: spacing.md,
@@ -71,6 +71,6 @@ const styles = StyleSheet.create({
   },
   value: {
     fontFamily: fontFamily.sansBold,
-    fontSize: fontSize.title * 1.2,
+    fontSize: fontSize.title,      // 32px — strict scale, no * 1.2 (CLAUDE.md Rule 4)
   },
 });
