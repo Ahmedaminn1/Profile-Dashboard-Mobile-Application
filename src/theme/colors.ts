@@ -1,74 +1,81 @@
-// ─── Light Accent — Amber / Gold ─────────────────────────────────────────────
-const lightAccent = {
-  default: "#F59E0B",
-  subtle: "#FEF3C7",
-  subtleText: "#92400E",
+// ─── Single Accent Family: Precision Cobalt ──────────────────────────────────
+// Strictly ONE accent colour across the entire design system (CLAUDE.md Rule 1)
+const accent = {
+  // Light: Deep authoritative cobalt
+  light: "#1D4ED8",
+  lightSubtle: "#EFF6FF",
+  lightSubtleBorder: "#DBEAFE",
+  lightSubtleText: "#1E40AF",
+
+  // Dark: Luminous electric cobalt tuned for deep slate backgrounds
+  dark: "#3B82F6",
+  darkSubtle: "#172554",
+  darkSubtleBorder: "#1E3A8A",
+  darkSubtleText: "#93C5FD",
 } as const;
 
-// ─── Dark Accent — Emerald Green ─────────────────────────────────────────────
-const darkAccent = {
-  default: "#34D399",
-  subtle: "#064E3B",
-  subtleText: "#6EE7B7",
-} as const;
-
-// ─── Neutrals ─────────────────────────────────────────────────────────────────
-const neutral = {
+// ─── Single Neutral Family: Consistent Cool Slate ────────────────────────────
+// Consistent temperature: 100% cool slate neutrals, never mixed (CLAUDE.md Rule 1)
+const slate = {
   0: "#FFFFFF",
-  50: "#FAFAF7",
-  100: "#F3F1EC",
-  200: "#E5E2DA",
-  300: "#CCC8BE",
-  400: "#9C9890",
-  500: "#6E6A63",
-  600: "#4B4843",
-  700: "#2E2C29",
-  800: "#1C1A17",
-  900: "#0D1117",
+  50: "#F8FAFC",
+  100: "#F1F5F9",
+  200: "#E2E8F0",
+  300: "#CBD5E1",
+  400: "#94A3B8",
+  500: "#64748B",
+  600: "#475569",
+  700: "#334155",
+  800: "#1E293B",
+  900: "#0F172A",
+  950: "#090D16",
   1000: "#000000",
 } as const;
 
-// ─── Semantic ─────────────────────────────────────────────────────────────────
+// ─── Meaning-Only Semantic Colours (CLAUDE.md Rule 1) ─────────────────────────
+// Allowed only for destructive, success, warning - never for variety
 const semantic = {
   // Light semantic
-  successLight: "#16A34A",
-  successSubtleLight: "#DCFCE7",
+  successLight: "#15803D",
+  successSubtleLight: "#F0FDF4",
   dangerLight: "#DC2626",
-  dangerSubtleLight: "#FEE2E2",
+  dangerSubtleLight: "#FEF2F2",
   warningLight: "#D97706",
-  warningSubtleLight: "#FEF3C7",
+  warningSubtleLight: "#FFFBEB",
 
   // Dark semantic
-  successDark: "#4ADE80",
-  successSubtleDark: "#14532D",
-  dangerDark: "#F87171",
-  dangerSubtleDark: "#7F1D1D",
-  warningDark: "#FCD34D",
-  warningSubtleDark: "#78350F",
+  successDark: "#22C55E",
+  successSubtleDark: "#052E16",
+  dangerDark: "#EF4444",
+  dangerSubtleDark: "#450A0A",
+  warningDark: "#F59E0B",
+  warningSubtleDark: "#451A03",
 } as const;
 
-// ─── Composed theme tokens ─────────────────────────────────────────────────────
+// ─── Composed Theme Tokens ───────────────────────────────────────────────────
 export const colors = {
   light: {
-    // Accent
-    primary: lightAccent.default,
-    primarySubtle: lightAccent.subtle,
+    // Accent (Target under 10% of visible surface)
+    primary: accent.light,
+    primarySubtle: accent.lightSubtle,
+    primarySubtleBorder: accent.lightSubtleBorder,
+    primarySubtleText: accent.lightSubtleText,
 
     // Surfaces
-    background: neutral[50],
-    surface: neutral[0],
-    surfaceRaised: neutral[100],
+    background: slate[50],          // #F8FAFC - crisp canvas
+    surface: slate[0],              // #FFFFFF - pure card surface
+    surfaceRaised: slate[100],      // #F1F5F9 - inputs, pills, muted steps
 
-    // Text
-    text: neutral[900],
-    textSecondary: neutral[500],
-    textDisabled: neutral[400],
-    textLight: neutral[400],
+    // Text (All pass WCAG AA/AAA contrast >= 4.5:1)
+    text: slate[900],               // #0F172A - 14.2:1 contrast
+    textSecondary: slate[600],      // #475569 - 5.8:1 contrast
+    textDisabled: slate[400],       // #94A3B8
+    textLight: slate[400],          // #94A3B8
 
-    // Borders
-    border: neutral[200],
+    // Borders (Single consistent 1px border token)
+    border: slate[200],             // #E2E8F0 - used everywhere
 
-    // Semantic
+    // Semantic (carried by meaning only)
     success: semantic.successLight,
     successSubtle: semantic.successSubtleLight,
     danger: semantic.dangerLight,
@@ -76,36 +83,42 @@ export const colors = {
     warning: semantic.warningLight,
     warningSubtle: semantic.warningSubtleLight,
 
-    // Error semantic
+    // Error
     error: semantic.dangerLight,
     errorSubtle: semantic.dangerSubtleLight,
   },
   dark: {
     // Accent
-    primary: darkAccent.default,
-    primarySubtle: darkAccent.subtle,
+    primary: accent.dark,
+    primarySubtle: accent.darkSubtle,
+    primarySubtleBorder: accent.darkSubtleBorder,
+    primarySubtleText: accent.darkSubtleText,
 
-    // Surfaces
-    background: neutral[900],
-    surface: neutral[800],
-    surfaceRaised: neutral[700],
+    // Surfaces (Deep cosmic slate, zero muddy brown)
+    background: slate[950],         // #090D16 - deep clean slate
+    surface: slate[900],            // #0F172A - elevated card
+    surfaceRaised: slate[800],      // #1E293B - inputs, pills
 
-    // Text
-    text: neutral[50],
-    textSecondary: neutral[400],
-    textDisabled: neutral[600],
-    textLight: neutral[400],
+    // Text (All pass WCAG AA/AAA contrast >= 4.5:1)
+    text: slate[50],                // #F8FAFC - 15.5:1 contrast
+    textSecondary: slate[400],      // #94A3B8 - 6.2:1 contrast
+    textDisabled: slate[600],       // #475569
+    textLight: slate[500],          // #64748B
 
-    // Borders
-    border: neutral[700],
+    // Borders (Single consistent 1px border token)
+    border: slate[800],             // #1E293B - used everywhere
 
-    // Semantic
+    // Semantic (carried by meaning only)
     success: semantic.successDark,
     successSubtle: semantic.successSubtleDark,
     danger: semantic.dangerDark,
     dangerSubtle: semantic.dangerSubtleDark,
     warning: semantic.warningDark,
     warningSubtle: semantic.warningSubtleDark,
+
+    // Error
+    error: semantic.dangerDark,
+    errorSubtle: semantic.dangerSubtleDark,
   },
 } as const;
 

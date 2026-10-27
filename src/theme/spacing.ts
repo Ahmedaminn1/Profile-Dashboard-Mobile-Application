@@ -1,15 +1,19 @@
+// Spacing scale: Every value is strictly a multiple of 4 (CLAUDE.md Rule 6)
 export const spacing = {
-    xs: 6,
-    sm: 8,
-    md: 16,
-    lg: 24,
-    xl: 40,
-}
+  xs: 4,
+  sm: 8,
+  md: 16,
+  lg: 24,
+  xl: 32,
+  xxl: 40,
+} as const;
 
+// Border radius scale: Multiples of 4, consistent geometry (CLAUDE.md Rule 2)
 export const radius = {
-    xs: 6,
-    sm: 8,
-    md: 18,
-    lg: 24,
-    xl: 40,
-}
+  none: 0,
+  sm: 4,
+  md: 8,
+  lg: 12,
+  xl: 16,
+  full: 9999,
+} as const;
