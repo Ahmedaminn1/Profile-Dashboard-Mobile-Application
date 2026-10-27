@@ -6,6 +6,7 @@ import AppCard from "@/components/AppCard";
 import SettingScreenHeader from "@/components/SettingScreenHeader";
 import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "react-i18next";
 import { spacing } from "@/theme/spacing";
 import { fontFamily } from "@/theme/typography";
 
@@ -25,35 +26,68 @@ function NotificationToggle({
   onToggle,
 }: NotificationToggleProps) {
   const { themeColors } = useTheme();
+  const { i18n } = useTranslation();
+  const isRTL = i18n.language === "ar";
 
   return (
-    <View style={[styles.toggleRow, { borderBottomColor: themeColors.border }]}>
+    <View
+      style={[
+        styles.toggleRow,
+        {
+          borderBottomColor: themeColors.border,
+          flexDirection: isRTL ? "row-reverse" : "row",
+        },
+      ]}
+    >
+      <View
+        style={[
+          styles.toggleIcon,
+          { backgroundColor: themeColors.primarySubtle },
+        ]}
+      >
+        <Ionicons name={icon} size={20} color={themeColors.primary} />
+      </View>
+      <View
+        style={[
+          styles.toggleInfo,
+          { alignItems: isRTL ? "flex-end" : "flex-start" },
+        ]}
+      >
+        <AppText
+          variant="subTitle"
+          style={{
+            color: themeColors.text,
+            fontFamily: fontFamily.sansBold,
+            textAlign: isRTL ? "right" : "left",
+          }}
+        >
+          {label}
+        </AppText>
+        <AppText
+          variant="body"
+          style={{
+            color: themeColors.textSecondary,
+            textAlign: isRTL ? "right" : "left",
+          }}
+        >
+          {description}
+        </AppText>
+      </View>
       <Switch
         value={value}
         onValueChange={onToggle}
         trackColor={{ false: themeColors.border, true: themeColors.primary }}
         thumbColor="#FFFFFF"
       />
-      <View style={styles.toggleInfo}>
-        <AppText
-          variant="subTitle"
-          style={{ color: themeColors.text, fontFamily: fontFamily.sansBold }}
-        >
-          {label}
-        </AppText>
-        <AppText variant="body" style={{ color: themeColors.textSecondary }}>
-          {description}
-        </AppText>
-      </View>
-      <View style={[styles.toggleIcon, { backgroundColor: themeColors.primarySubtle }]}>
-        <Ionicons name={icon} size={20} color={themeColors.primary} />
-      </View>
     </View>
   );
 }
 
 export default function NotificationsScreen() {
   const { themeColors } = useTheme();
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === "ar";
+  const language = i18n.language;
 
   const [pushEnabled, setPushEnabled] = useState(true);
   const [emailEnabled, setEmailEnabled] = useState(false);
@@ -65,33 +99,54 @@ export default function NotificationsScreen() {
   return (
     <AppSafeAreaView>
       <ScrollView contentContainerStyle={styles.content}>
-        <SettingScreenHeader title="الاشعارات" icon="notifications-outline" />
+        <SettingScreenHeader
+          title={t("settings.menu.notifications")}
+          icon="notifications-outline"
+        />
 
         {/* Push Notifications Card */}
         <AppCard>
           <AppText
             variant="subTitle"
-            style={[styles.sectionTitle, { color: themeColors.primary }]}
+            style={[
+              styles.sectionTitle,
+              {
+                color: themeColors.primary,
+                textAlign: isRTL ? "right" : "left",
+              },
+            ]}
           >
-            إشعارات التطبيق
+            {language === "ar" ? "إشعارات التطبيق" : "App Notifications"}
           </AppText>
           <NotificationToggle
-            label="إشعارات فورية"
-            description="تلقّي إشعارات فورية عند كل تحديث"
+            label={language === "ar" ? "إشعارات فورية" : "Push Notifications"}
+            description={
+              language === "ar"
+                ? "تلقّي إشعارات فورية عند كل تحديث"
+                : "Receive instant notifications on updates"
+            }
             icon="notifications-outline"
             value={pushEnabled}
             onToggle={setPushEnabled}
           />
           <NotificationToggle
-            label="التذكيرات"
-            description="تذكيرات يومية لمتابعة مهامك"
+            label={language === "ar" ? "التذكيرات" : "Reminders"}
+            description={
+              language === "ar"
+                ? "تذكيرات يومية لمتابعة مهامك"
+                : "Daily reminders to keep up with tasks"
+            }
             icon="alarm-outline"
             value={remindersEnabled}
             onToggle={setRemindersEnabled}
           />
           <NotificationToggle
-            label="التحديثات"
-            description="إشعارات عند صدور تحديثات جديدة"
+            label={language === "ar" ? "التحديثات" : "Updates"}
+            description={
+              language === "ar"
+                ? "إشعارات عند صدور تحديثات جديدة"
+                : "Notifications about new updates"
+            }
             icon="refresh-outline"
             value={updatesEnabled}
             onToggle={setUpdatesEnabled}
@@ -102,13 +157,23 @@ export default function NotificationsScreen() {
         <AppCard>
           <AppText
             variant="subTitle"
-            style={[styles.sectionTitle, { color: themeColors.primary }]}
+            style={[
+              styles.sectionTitle,
+              {
+                color: themeColors.primary,
+                textAlign: isRTL ? "right" : "left",
+              },
+            ]}
           >
-            إشعارات البريد
+            {language === "ar" ? "إشعارات البريد" : "Email Notifications"}
           </AppText>
           <NotificationToggle
-            label="البريد الإلكتروني"
-            description="تلقّي ملخص أسبوعي على بريدك"
+            label={language === "ar" ? "البريد الإلكتروني" : "Email Digest"}
+            description={
+              language === "ar"
+                ? "تلقّي ملخص أسبوعي على بريدك"
+                : "Receive a weekly summary in your inbox"
+            }
             icon="mail-outline"
             value={emailEnabled}
             onToggle={setEmailEnabled}
@@ -119,20 +184,34 @@ export default function NotificationsScreen() {
         <AppCard>
           <AppText
             variant="subTitle"
-            style={[styles.sectionTitle, { color: themeColors.primary }]}
+            style={[
+              styles.sectionTitle,
+              {
+                color: themeColors.primary,
+                textAlign: isRTL ? "right" : "left",
+              },
+            ]}
           >
-            الصوت والاهتزاز
+            {language === "ar" ? "الصوت والاهتزاز" : "Sound & Vibration"}
           </AppText>
           <NotificationToggle
-            label="الصوت"
-            description="تشغيل صوت عند وصول الإشعارات"
+            label={language === "ar" ? "الصوت" : "Sound"}
+            description={
+              language === "ar"
+                ? "تشغيل صوت عند وصول الإشعارات"
+                : "Play sound when notifications arrive"
+            }
             icon="volume-high-outline"
             value={soundEnabled}
             onToggle={setSoundEnabled}
           />
           <NotificationToggle
-            label="الاهتزاز"
-            description="اهتزاز الجهاز عند وصول الإشعارات"
+            label={language === "ar" ? "الاهتزاز" : "Vibration"}
+            description={
+              language === "ar"
+                ? "اهتزاز الجهاز عند وصول الإشعارات"
+                : "Vibrate on incoming notifications"
+            }
             icon="phone-portrait-outline"
             value={vibrationEnabled}
             onToggle={setVibrationEnabled}
@@ -154,7 +233,6 @@ const styles = StyleSheet.create({
     fontFamily: fontFamily.sansExtraBold,
   },
   toggleRow: {
-    flexDirection: "row-reverse",
     alignItems: "center",
     justifyContent: "space-between",
     paddingVertical: spacing.md,
@@ -163,7 +241,6 @@ const styles = StyleSheet.create({
   },
   toggleInfo: {
     flex: 1,
-    alignItems: "flex-end",
     gap: 4,
   },
   toggleIcon: {

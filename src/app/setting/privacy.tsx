@@ -7,6 +7,7 @@ import AppButton from "@/components/AppButton";
 import SettingScreenHeader from "@/components/SettingScreenHeader";
 import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "react-i18next";
 import { spacing } from "@/theme/spacing";
 import { fontFamily } from "@/theme/typography";
 
@@ -26,35 +27,67 @@ function PrivacyToggle({
   onToggle,
 }: PrivacyToggleProps) {
   const { themeColors } = useTheme();
+  const { i18n } = useTranslation();
+  const isRTL = i18n.language === "ar";
 
   return (
-    <View style={[styles.toggleRow, { borderBottomColor: themeColors.border }]}>
+    <View
+      style={[
+        styles.toggleRow,
+        {
+          borderBottomColor: themeColors.border,
+          flexDirection: isRTL ? "row-reverse" : "row",
+        },
+      ]}
+    >
+      <View
+        style={[
+          styles.toggleIcon,
+          { backgroundColor: themeColors.primarySubtle },
+        ]}
+      >
+        <Ionicons name={icon} size={20} color={themeColors.primary} />
+      </View>
+      <View
+        style={[
+          styles.toggleInfo,
+          { alignItems: isRTL ? "flex-end" : "flex-start" },
+        ]}
+      >
+        <AppText
+          variant="subTitle"
+          style={{
+            color: themeColors.text,
+            fontFamily: fontFamily.sansBold,
+            textAlign: isRTL ? "right" : "left",
+          }}
+        >
+          {label}
+        </AppText>
+        <AppText
+          variant="body"
+          style={{
+            color: themeColors.textSecondary,
+            textAlign: isRTL ? "right" : "left",
+          }}
+        >
+          {description}
+        </AppText>
+      </View>
       <Switch
         value={value}
         onValueChange={onToggle}
         trackColor={{ false: themeColors.border, true: themeColors.primary }}
         thumbColor="#FFFFFF"
       />
-      <View style={styles.toggleInfo}>
-        <AppText
-          variant="subTitle"
-          style={{ color: themeColors.text, fontFamily: fontFamily.sansBold }}
-        >
-          {label}
-        </AppText>
-        <AppText variant="body" style={{ color: themeColors.textSecondary }}>
-          {description}
-        </AppText>
-      </View>
-      <View style={[styles.toggleIcon, { backgroundColor: themeColors.primarySubtle }]}>
-        <Ionicons name={icon} size={20} color={themeColors.primary} />
-      </View>
     </View>
   );
 }
 
 export default function PrivacyScreen() {
   const { themeColors } = useTheme();
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === "ar";
 
   const [profilePublic, setProfilePublic] = useState(true);
   const [shareActivity, setShareActivity] = useState(false);
@@ -65,26 +98,35 @@ export default function PrivacyScreen() {
   return (
     <AppSafeAreaView>
       <ScrollView contentContainerStyle={styles.content}>
-        <SettingScreenHeader title="الخصوصية" icon="lock-closed-outline" />
+        <SettingScreenHeader
+          title={t("settings.menu.privacy")}
+          icon="lock-closed-outline"
+        />
 
         {/* Profile Visibility Card */}
         <AppCard>
           <AppText
             variant="subTitle"
-            style={[styles.sectionTitle, { color: themeColors.primary }]}
+            style={[
+              styles.sectionTitle,
+              {
+                color: themeColors.primary,
+                textAlign: isRTL ? "right" : "left",
+              },
+            ]}
           >
-            ظهور الملف الشخصي
+            {t("privacy.profileVisibility")}
           </AppText>
           <PrivacyToggle
-            label="ملف عام"
-            description="يمكن لأي شخص رؤية ملفك الشخصي"
+            label={t("privacy.publicProfile")}
+            description={t("privacy.publicProfileDesc")}
             icon="eye-outline"
             value={profilePublic}
             onToggle={setProfilePublic}
           />
           <PrivacyToggle
-            label="مشاركة النشاط"
-            description="إظهار آخر تحديثاتك للآخرين"
+            label={t("privacy.shareActivity")}
+            description={t("privacy.shareActivityDesc")}
             icon="pulse-outline"
             value={shareActivity}
             onToggle={setShareActivity}
@@ -95,20 +137,26 @@ export default function PrivacyScreen() {
         <AppCard>
           <AppText
             variant="subTitle"
-            style={[styles.sectionTitle, { color: themeColors.primary }]}
+            style={[
+              styles.sectionTitle,
+              {
+                color: themeColors.primary,
+                textAlign: isRTL ? "right" : "left",
+              },
+            ]}
           >
-            إظهار معلومات التواصل
+            {t("privacy.contactInfo")}
           </AppText>
           <PrivacyToggle
-            label="البريد الإلكتروني"
-            description="إظهار بريدك للآخرين في ملفك"
+            label={t("privacy.email")}
+            description={t("privacy.emailDesc")}
             icon="mail-outline"
             value={showEmail}
             onToggle={setShowEmail}
           />
           <PrivacyToggle
-            label="رقم الهاتف"
-            description="إظهار رقم هاتفك في ملفك الشخصي"
+            label={t("privacy.phone")}
+            description={t("privacy.phoneDesc")}
             icon="call-outline"
             value={showPhone}
             onToggle={setShowPhone}
@@ -119,13 +167,19 @@ export default function PrivacyScreen() {
         <AppCard>
           <AppText
             variant="subTitle"
-            style={[styles.sectionTitle, { color: themeColors.primary }]}
+            style={[
+              styles.sectionTitle,
+              {
+                color: themeColors.primary,
+                textAlign: isRTL ? "right" : "left",
+              },
+            ]}
           >
-            البيانات والتحليلات
+            {t("privacy.dataAnalytics")}
           </AppText>
           <PrivacyToggle
-            label="جمع البيانات"
-            description="السماح بجمع بيانات مجهولة لتحسين التطبيق"
+            label={t("privacy.dataCollection")}
+            description={t("privacy.dataCollectionDesc")}
             icon="analytics-outline"
             value={dataCollection}
             onToggle={setDataCollection}
@@ -136,18 +190,28 @@ export default function PrivacyScreen() {
         <AppCard>
           <AppText
             variant="subTitle"
-            style={[styles.sectionTitle, { color: themeColors.danger }]}
+            style={[
+              styles.sectionTitle,
+              {
+                color: themeColors.danger,
+                textAlign: isRTL ? "right" : "left",
+              },
+            ]}
           >
-            منطقة الخطر
+            {t("privacy.dangerZone")}
           </AppText>
           <AppText
             variant="body"
-            style={{ color: themeColors.textSecondary, textAlign: "right", marginBottom: spacing.md }}
+            style={{
+              color: themeColors.textSecondary,
+              textAlign: isRTL ? "right" : "left",
+              marginBottom: spacing.md,
+            }}
           >
-            حذف الحساب نهائياً سيؤدي إلى فقدان جميع بياناتك ولا يمكن التراجع عن هذا الإجراء.
+            {t("privacy.deleteAccountWarning")}
           </AppText>
           <AppButton
-            title="حذف الحساب"
+            title={t("privacy.deleteAccount")}
             variant="danger"
             icon="trash-outline"
             onPress={() => {}}
@@ -169,7 +233,6 @@ const styles = StyleSheet.create({
     fontFamily: fontFamily.sansExtraBold,
   },
   toggleRow: {
-    flexDirection: "row-reverse",
     alignItems: "center",
     justifyContent: "space-between",
     paddingVertical: spacing.md,
@@ -178,7 +241,6 @@ const styles = StyleSheet.create({
   },
   toggleInfo: {
     flex: 1,
-    alignItems: "flex-end",
     gap: 4,
   },
   toggleIcon: {

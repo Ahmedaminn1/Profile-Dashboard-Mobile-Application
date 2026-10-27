@@ -15,6 +15,7 @@ import Avatar from "@/components/Avatar";
 import SettingScreenHeader from "@/components/SettingScreenHeader";
 import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "react-i18next";
 import { spacing } from "@/theme/spacing";
 import { fontFamily, fontSize } from "@/theme/typography";
 
@@ -40,39 +41,25 @@ function EditableRow({
   keyboardType = "default",
 }: EditableRowProps) {
   const { themeColors } = useTheme();
+  const { i18n } = useTranslation();
+  const isRTL = i18n.language === "ar";
 
   return (
-    <View style={[styles.infoRow, { borderBottomColor: themeColors.border }]}>
-      <View style={styles.infoLeft}>
-        {isEditing ? (
-          <TextInput
-            value={value}
-            onChangeText={onChangeText}
-            keyboardType={keyboardType}
-            style={[
-              styles.input,
-              {
-                color: themeColors.text,
-                borderColor: themeColors.primary,
-                backgroundColor: themeColors.surfaceRaised,
-              },
-            ]}
-            placeholderTextColor={themeColors.textSecondary}
-            textAlign="left"
-          />
-        ) : (
-          <AppText variant="body" style={{ color: themeColors.textSecondary }}>
-            {value}
-          </AppText>
-        )}
-      </View>
-      <View style={styles.infoRight}>
-        <AppText
-          variant="body"
-          style={{ color: themeColors.text, fontFamily: fontFamily.sansBold }}
-        >
-          {label}
-        </AppText>
+    <View
+      style={[
+        styles.infoRow,
+        {
+          borderBottomColor: themeColors.border,
+          flexDirection: isRTL ? "row-reverse" : "row",
+        },
+      ]}
+    >
+      <View
+        style={[
+          styles.infoRight,
+          { flexDirection: isRTL ? "row-reverse" : "row" },
+        ]}
+      >
         <View
           style={[
             styles.infoIcon,
@@ -89,6 +76,51 @@ function EditableRow({
             color={isEditing ? "#fff" : themeColors.primary}
           />
         </View>
+        <AppText
+          variant="body"
+          style={{
+            color: themeColors.text,
+            fontFamily: fontFamily.sansBold,
+            textAlign: isRTL ? "right" : "left",
+          }}
+        >
+          {label}
+        </AppText>
+      </View>
+
+      <View
+        style={[
+          styles.infoLeft,
+          { alignItems: isRTL ? "flex-start" : "flex-end" },
+        ]}
+      >
+        {isEditing ? (
+          <TextInput
+            value={value}
+            onChangeText={onChangeText}
+            keyboardType={keyboardType}
+            style={[
+              styles.input,
+              {
+                color: themeColors.text,
+                borderColor: themeColors.primary,
+                backgroundColor: themeColors.surfaceRaised,
+                textAlign: isRTL ? "left" : "right",
+              },
+            ]}
+            placeholderTextColor={themeColors.textSecondary}
+          />
+        ) : (
+          <AppText
+            variant="body"
+            style={{
+              color: themeColors.textSecondary,
+              textAlign: isRTL ? "left" : "right",
+            }}
+          >
+            {value}
+          </AppText>
+        )}
       </View>
     </View>
   );
@@ -97,12 +129,21 @@ function EditableRow({
 // ─── Account Screen ────────────────────────────────────────────────────────────
 export default function AccountScreen() {
   const { themeColors } = useTheme();
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === "ar";
+  const language = i18n.language;
   const [isEditing, setIsEditing] = useState(false);
 
   // Personal Info State
-  const [fullName, setFullName] = useState("أحمد أمين");
-  const [jobTitle, setJobTitle] = useState("مهندس برمجيات");
-  const [city, setCity] = useState("القاهرة، مصر");
+  const [fullName, setFullName] = useState(
+    language === "ar" ? "أحمد أمين" : "Ahmed Amin"
+  );
+  const [jobTitle, setJobTitle] = useState(
+    language === "ar" ? "مهندس برمجيات" : "Software Engineer"
+  );
+  const [city, setCity] = useState(
+    language === "ar" ? "القاهرة، مصر" : "Cairo, Egypt"
+  );
 
   // Contact Info State
   const [email, setEmail] = useState("ahmedamin372002@gmail.com");
@@ -126,7 +167,12 @@ export default function AccountScreen() {
 
   const handleSave = () => {
     setIsEditing(false);
-    Alert.alert("✅ تم الحفظ", "تم تحديث بياناتك بنجاح");
+    Alert.alert(
+      language === "ar" ? "✅ تم الحفظ" : "✅ Saved",
+      language === "ar"
+        ? "تم تحديث بياناتك بنجاح"
+        : "Your profile has been updated successfully"
+    );
   };
 
   const handleCancel = () => {
@@ -145,19 +191,28 @@ export default function AccountScreen() {
         contentContainerStyle={styles.content}
         keyboardShouldPersistTaps="handled"
       >
-        <SettingScreenHeader title="الحساب" icon="person-outline" />
+        <SettingScreenHeader
+          title={t("account.title")}
+          icon="person-outline"
+        />
 
         {/* Avatar Section */}
         <View style={styles.avatarSection}>
           <Avatar size={100} userName="Ahmed Amin" uri={AvatarURL} />
           <View style={styles.avatarInfo}>
             <AppText variant="title">{fullName}</AppText>
-            <AppText variant="body" style={{ color: themeColors.textSecondary }}>
+            <AppText
+              variant="body"
+              style={{ color: themeColors.textSecondary }}
+            >
               {jobTitle}
             </AppText>
           </View>
           <Pressable
-            style={[styles.editAvatarBtn, { backgroundColor: themeColors.primary }]}
+            style={[
+              styles.editAvatarBtn,
+              { backgroundColor: themeColors.primary },
+            ]}
           >
             <Ionicons name="camera-outline" size={18} color="#fff" />
           </Pressable>
@@ -167,26 +222,32 @@ export default function AccountScreen() {
         <AppCard>
           <AppText
             variant="subTitle"
-            style={[styles.sectionTitle, { color: themeColors.primary }]}
+            style={[
+              styles.sectionTitle,
+              {
+                color: themeColors.primary,
+                textAlign: isRTL ? "right" : "left",
+              },
+            ]}
           >
-            البيانات الشخصية
+            {t("account.personalInfo")}
           </AppText>
           <EditableRow
-            label="الاسم الكامل"
+            label={t("account.name")}
             value={fullName}
             icon="person-outline"
             isEditing={isEditing}
             onChangeText={setFullName}
           />
           <EditableRow
-            label="المسمى الوظيفي"
+            label={t("account.jobTitle")}
             value={jobTitle}
             icon="briefcase-outline"
             isEditing={isEditing}
             onChangeText={setJobTitle}
           />
           <EditableRow
-            label="المدينة"
+            label={t("account.location")}
             value={city}
             icon="location-outline"
             isEditing={isEditing}
@@ -198,12 +259,18 @@ export default function AccountScreen() {
         <AppCard>
           <AppText
             variant="subTitle"
-            style={[styles.sectionTitle, { color: themeColors.primary }]}
+            style={[
+              styles.sectionTitle,
+              {
+                color: themeColors.primary,
+                textAlign: isRTL ? "right" : "left",
+              },
+            ]}
           >
-            معلومات التواصل
+            {language === "ar" ? "معلومات التواصل" : "Contact Information"}
           </AppText>
           <EditableRow
-            label="البريد الإلكتروني"
+            label={t("account.email")}
             value={email}
             icon="mail-outline"
             isEditing={isEditing}
@@ -211,7 +278,7 @@ export default function AccountScreen() {
             keyboardType="email-address"
           />
           <EditableRow
-            label="رقم الهاتف"
+            label={t("account.phone")}
             value={phone}
             icon="call-outline"
             isEditing={isEditing}
@@ -229,15 +296,20 @@ export default function AccountScreen() {
 
         {/* Action Buttons */}
         {isEditing ? (
-          <View style={styles.actionRow}>
+          <View
+            style={[
+              styles.actionRow,
+              { flexDirection: isRTL ? "row-reverse" : "row" },
+            ]}
+          >
             <AppButton
-              title="حفظ التغييرات"
+              title={t("account.saveChanges")}
               icon="checkmark-outline"
               onPress={handleSave}
               style={{ flex: 1 }}
             />
             <AppButton
-              title="إلغاء"
+              title={t("common.cancel")}
               variant="outlined"
               icon="close-outline"
               onPress={handleCancel}
@@ -246,7 +318,7 @@ export default function AccountScreen() {
           </View>
         ) : (
           <AppButton
-            title="تعديل البيانات"
+            title={t("account.editProfile")}
             icon="create-outline"
             onPress={handleEdit}
             style={{ marginTop: spacing.sm }}
@@ -288,7 +360,6 @@ const styles = StyleSheet.create({
     fontFamily: fontFamily.sansExtraBold,
   },
   infoRow: {
-    flexDirection: "row-reverse",
     alignItems: "center",
     justifyContent: "space-between",
     paddingVertical: spacing.md,
@@ -296,13 +367,11 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
   },
   infoRight: {
-    flexDirection: "row-reverse",
     alignItems: "center",
     gap: spacing.sm,
   },
   infoLeft: {
     flex: 1,
-    alignItems: "flex-start",
   },
   infoIcon: {
     width: 32,
@@ -323,7 +392,6 @@ const styles = StyleSheet.create({
     minHeight: 36,
   },
   actionRow: {
-    flexDirection: "row-reverse",
     gap: spacing.sm,
     marginTop: spacing.sm,
   },
