@@ -6,6 +6,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { spacing } from "@/theme/spacing";
 import { fontFamily, fontSize } from "@/theme/typography";
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "react-i18next";
 
 export interface SkillItem {
   id: number;
@@ -17,45 +18,63 @@ export interface SkillItem {
 
 export default function SkillsCard({ item }: { item: SkillItem }) {
   const { themeColors } = useTheme();
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === "ar";
+
+  const getLocalizedLevel = (lvl: string) => {
+    switch (lvl) {
+      case "مبتدئ":
+      case "Beginner":
+        return t("skills.levels.beginner");
+      case "متوسط":
+      case "Intermediate":
+        return t("skills.levels.intermediate");
+      case "متقدم":
+      case "Advanced":
+        return t("skills.levels.advanced");
+      default:
+        return lvl;
+    }
+  };
+
+  const getLocalizedBadge = (bdg: string) => {
+    switch (bdg) {
+      case "جيد":
+      case "Good":
+        return t("skills.badges.good");
+      case "جيد جداً":
+      case "Very Good":
+        return t("skills.badges.veryGood");
+      case "محترف":
+      case "Professional":
+        return t("skills.badges.professional");
+      case "خبير":
+      case "Expert":
+        return t("skills.badges.expert");
+      default:
+        return bdg;
+    }
+  };
 
   return (
-    <AppCard style={styles.card}>
-      <View style={styles.skillRow}>
-        <View
-          style={[
-            styles.iconBox,
-            { backgroundColor: themeColors.primarySubtle },
-          ]}
-        >
+    <AppCard style={[styles.card, { flexDirection: isRTL ? "row-reverse" : "row" }]}>
+      <View style={[styles.skillRow, { flexDirection: isRTL ? "row-reverse" : "row" },]}>
+        <View style={[styles.iconBox, { backgroundColor: themeColors.primarySubtle },]}>
           <Ionicons name={item.icon} size={28} color={themeColors.primary} />
         </View>
-        <View>
-          <AppText
-            variant="subTitle"
-            style={[styles.title, { color: themeColors.text }]}
-          >
+        <View style={{ alignItems: isRTL ? "flex-end" : "flex-start" }}>
+          <AppText variant="subTitle" style={[styles.title, { color: themeColors.text }]}>
             {item.title}
           </AppText>
-          <AppText
-            variant="body"
-            style={[styles.level, { color: themeColors.textLight }]}
-          >
-            {item.level}
+          <AppText variant="body" style={[styles.level, { color: themeColors.textLight }]}>
+            {getLocalizedLevel(item.level)}
           </AppText>
         </View>
       </View>
 
-      <View
-        style={[
-          styles.badge,
-          { backgroundColor: themeColors.primarySubtle },
-        ]}
-      >
-        <AppText
-          style={[styles.badgeText, { color: themeColors.primary }]}
-          variant="body"
-        >
-          {item.badge}
+      <View style={[styles.badge, { backgroundColor: themeColors.primarySubtle }]}>
+        <AppText style={[styles.badgeText, { color: themeColors.primary }]} variant="body">
+          {getLocalizedBadge(item.badge)}
         </AppText>
       </View>
     </AppCard>
@@ -65,7 +84,6 @@ export default function SkillsCard({ item }: { item: SkillItem }) {
 const styles = StyleSheet.create({
   card: {
     paddingVertical: spacing.md,
-    flexDirection: "row-reverse",
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: spacing.md,
@@ -73,7 +91,6 @@ const styles = StyleSheet.create({
     minHeight: 104,
   },
   skillRow: {
-    flexDirection: "row-reverse",
     alignItems: "center",
     gap: spacing.md,
   },

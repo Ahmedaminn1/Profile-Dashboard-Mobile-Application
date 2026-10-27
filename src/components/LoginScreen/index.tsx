@@ -2,7 +2,6 @@ import {
   View,
   TextInput,
   StyleSheet,
-  Alert,
   ActivityIndicator,
   Pressable,
 } from "react-native";
@@ -16,9 +15,14 @@ import { spacing } from "@/theme/spacing";
 import { fontSize, fontFamily } from "@/theme/typography";
 import AppButton from "../AppButton";
 import { useAuth } from "@/context/AuthContext";
+import { useTranslation } from "react-i18next";
+import { toggleLanguage } from "@/i18n/i18n";
 
 export default function LoginScreen() {
   const { login, isSubmitting } = useAuth();
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === "ar";
+  const language = i18n.language;
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -27,18 +31,26 @@ export default function LoginScreen() {
   const handleLogin = async () => {
     setError("");
     if (!username.trim() || !password) {
-      setError("من فضلك أدخل اسم المستخدم وكلمة المرور");
+      setError(t("auth.pleaseEnterUsernameAndPassword"));
       return;
     }
     const result = await login(username.trim(), password);
     if (!result.success) {
-      const msg = result.message || "اسم المستخدم أو كلمة المرور غير صحيحة";
+      const msg = result.message || t("auth.invalidCredentials");
       setError(msg);
     }
   };
 
   return (
     <AppSafeAreaView style={styles.safeAreaView}>
+      {/* Top Language Switcher */}
+      <Pressable onPress={toggleLanguage} style={styles.langToggle}>
+        <Ionicons name="globe-outline" size={20} color={colors.light.primary} />
+        <AppText style={styles.langText}>
+          {language === "ar" ? "English" : "العربية"}
+        </AppText>
+      </Pressable>
+
       <AppCard style={styles.card}>
         <View>
           <Ionicons
@@ -49,19 +61,20 @@ export default function LoginScreen() {
           />
         </View>
         <AppText style={styles.title} variant="title">
-          تسجيل الدخول
+          {t("auth.login")}
         </AppText>
-        <AppText
-          style={styles.subTitle}
-          variant="subTitle"
-        >{` قم بادخال بياناتك من فضلك `}</AppText>
+        <AppText style={styles.subTitle} variant="subTitle">
+          {t("auth.enterCredentialsPrompt")}
+        </AppText>
 
         <View style={styles.inputContainer}>
           <TextInput
-            placeholder="اسم المستخدم"
+            placeholder={t("auth.usernamePlaceholder")}
             placeholderTextColor={colors.light.textSecondary}
-            style={styles.input}
-            textAlign="right"
+            style={[
+              styles.input,
+              { textAlign: isRTL ? "right" : "left" },
+            ]}
             value={username}
             onChangeText={(text) => {
               setUsername(text);
@@ -72,10 +85,16 @@ export default function LoginScreen() {
 
           <View style={styles.passwordWrapper}>
             <TextInput
-              placeholder="كلمة المرور"
+              placeholder={t("auth.passwordPlaceholder")}
               placeholderTextColor={colors.light.textSecondary}
-              style={styles.passwordInput}
-              textAlign="right"
+              style={[
+                styles.passwordInput,
+                {
+                  textAlign: isRTL ? "right" : "left",
+                  paddingLeft: isRTL ? 42 : 12,
+                  paddingRight: !isRTL ? 42 : 12,
+                },
+              ]}
               value={password}
               onChangeText={(text) => {
                 setPassword(text);
@@ -85,7 +104,10 @@ export default function LoginScreen() {
               autoCapitalize="none"
             />
             <Pressable
-              style={styles.eyeIcon}
+              style={[
+                styles.eyeIcon,
+                isRTL ? { left: 12 } : { right: 12 },
+              ]}
               onPress={() => setShowPassword((prev) => !prev)}
             >
               <Ionicons
@@ -99,7 +121,7 @@ export default function LoginScreen() {
 
         <AppButton
           style={[styles.loginButton, isSubmitting && { opacity: 0.5 }]}
-          title={isSubmitting ? "جاري التحقق..." : "تسجيل الدخول"}
+          title={isSubmitting ? t("auth.loggingIn") : t("auth.login")}
           icon={isSubmitting ? undefined : "log-in-outline"}
           onPress={handleLogin}
         />
@@ -113,9 +135,9 @@ export default function LoginScreen() {
           </AppText>
         ) : (
           <AppText style={styles.footerText} variant="caption">
-            {` لا تمتلك حساب ؟ `}
+            {language === "ar" ? "لا تمتلك حساب؟ " : "Don't have an account? "}
             <AppText style={styles.signUpText} variant="caption">
-              {` تسجيل حساب `}
+              {t("auth.signup")}
             </AppText>
           </AppText>
         )}
@@ -138,6 +160,24 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: spacing.lg,
   },
+  langToggle: {
+    position: "absolute",
+    top: 50,
+    right: 20,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    padding: 8,
+    borderRadius: 16,
+    backgroundColor: colors.light.surfaceRaised,
+    borderWidth: 1,
+    borderColor: colors.light.border,
+  },
+  langText: {
+    fontSize: 14,
+    fontFamily: fontFamily.sansBold,
+    color: colors.light.primary,
+  },
   card: {
     borderRadius: 24,
     width: "100%",
@@ -147,7 +187,6 @@ const styles = StyleSheet.create({
     alignItems: "stretch",
     borderColor: colors.light.border,
   },
-
   lockIcon: {
     alignSelf: "center",
     marginBottom: spacing.md,
@@ -160,7 +199,6 @@ const styles = StyleSheet.create({
     fontFamily: fontFamily.sans,
     color: colors.light.primary,
   },
-
   title: {
     color: colors.light.text,
     textAlign: "center",
@@ -193,14 +231,12 @@ const styles = StyleSheet.create({
     borderColor: colors.light.border,
     borderRadius: 12,
     padding: 12,
-    paddingLeft: 42,
     fontSize: fontSize.lg,
     fontFamily: fontFamily.sans,
     color: colors.light.text,
   },
   eyeIcon: {
     position: "absolute",
-    left: 12,
     top: 14,
     zIndex: 1,
   },

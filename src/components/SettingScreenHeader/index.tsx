@@ -4,6 +4,7 @@ import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import AppText from "@/components/AppText";
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "react-i18next";
 import { spacing } from "@/theme/spacing";
 
 interface SettingScreenHeaderProps {
@@ -17,18 +18,34 @@ export default function SettingScreenHeader({
 }: SettingScreenHeaderProps) {
   const router = useRouter();
   const { themeColors } = useTheme();
+  const { i18n } = useTranslation();
+  const isRTL = i18n.language === "ar";
 
   return (
-    <View style={styles.header}>
+    <View
+      style={[
+        styles.header,
+        { flexDirection: isRTL ? "row-reverse" : "row" },
+      ]}
+    >
       <Pressable onPress={() => router.back()} style={styles.backBtn}>
-        <Ionicons name="chevron-forward-outline" size={28} color={themeColors.text} />
+        <Ionicons
+          name={isRTL ? "chevron-forward-outline" : "chevron-back-outline"}
+          size={28}
+          color={themeColors.text}
+        />
       </Pressable>
 
       <AppText variant="title" style={styles.title}>
         {title}
       </AppText>
 
-      <View style={[styles.iconBox, { backgroundColor: themeColors.primarySubtle }]}>
+      <View
+        style={[
+          styles.iconBox,
+          { backgroundColor: themeColors.primarySubtle },
+        ]}
+      >
         <Ionicons name={icon} size={24} color={themeColors.primary} />
       </View>
     </View>
@@ -37,7 +54,6 @@ export default function SettingScreenHeader({
 
 const styles = StyleSheet.create({
   header: {
-    flexDirection: "row-reverse",
     alignItems: "center",
     justifyContent: "space-between",
     paddingHorizontal: spacing.md,

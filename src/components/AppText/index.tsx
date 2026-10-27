@@ -3,6 +3,7 @@ import React from "react";
 import { fontFamily, fontSize } from "@/theme/typography";
 import { spacing } from "@/theme/spacing";
 import { useTheme } from "@/context/ThemeContext";
+import { useTranslation } from "react-i18next";
 
 interface AppTextProps {
   variant?: "title" | "subTitle" | "body" | "caption" | "button";
@@ -17,6 +18,8 @@ export default function AppText({
   ...props
 }: AppTextProps) {
   const { themeColors } = useTheme();
+  const { i18n } = useTranslation();
+  const isRTL = i18n.language === "ar";
 
   return (
     <Text
@@ -28,6 +31,8 @@ export default function AppText({
             variant === "caption"
               ? themeColors.textSecondary
               : themeColors.text,
+          textAlign: isRTL ? "right" : "left",
+          writingDirection: isRTL ? "rtl" : "ltr",
         },
         styles[variant],
         style,
@@ -42,8 +47,6 @@ const styles = StyleSheet.create({
   base: {
     fontSize: spacing.xl,
     fontFamily: fontFamily.sans,
-    textAlign: "right",
-    writingDirection: "rtl",
   },
   title: {
     fontFamily: fontFamily.sansExtraBold,
