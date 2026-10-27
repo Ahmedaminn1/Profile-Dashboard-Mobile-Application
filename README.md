@@ -1,92 +1,246 @@
-# 📱 Profile Dashboard Mobile App
+# 📱 Profile Dashboard — React Native Mobile App
 
-<div align="center">
-  <img alt="React Native" src="https://img.shields.io/badge/React_Native-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" />
-  <img alt="Expo" src="https://img.shields.io/badge/Expo-000020?style=for-the-badge&logo=expo&logoColor=white" />
-  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" />
-  <img alt="Clean Code" src="https://img.shields.io/badge/Architecture-Clean_Code-success?style=for-the-badge" />
-</div>
-
-<br/>
-
-A beautifully designed, highly interactive **Profile Dashboard Mobile Application** built with React Native and Expo Router. This project demonstrates best practices in **Clean Code Architecture**, modular component design, and scalable state management.
+A modern, fully-featured **Profile Dashboard** mobile application built with **React Native** and **Expo**. The app showcases a professional developer profile with skills management, theme customization, multi-language support, and comprehensive settings — all wrapped in a clean, accessible design system.
 
 ---
 
-## ✨ Features
+## ✨ Features Overview
 
-- **Modern & Responsive UI**: Carefully crafted themes (colors, typography, spacing) that scale gracefully across different devices.
-- **Expo Router Navigation**: Seamless navigation using file-based routing including a Custom Drawer and Stack navigation.
-- **Skills Management**: An interactive list to display professional skills, integrated with beautiful typography and `Ionicons`.
-- **Dynamic Theming**: Support for custom themes utilizing React Context for smooth, app-wide UI consistency.
-- **Optimized Performance**: Highly performant lists (`FlatList`) with proper separation of components and minimal re-renders.
-- **RTL Support**: Built with Arabic/RTL (Right-to-Left) direction in mind, showcasing robust styling capabilities.
+### 🔐 Authentication System
+- **Login screen** with username & password fields
+- **Secure token storage** using `expo-secure-store`
+- **Session persistence** — auto-restores login state on app restart
+- **Auth context** with global state management (`AuthProvider` / `useAuth`)
+- **API integration** with [DummyJSON Auth API](https://dummyjson.com/docs/auth) for real login flow
+- **Logout** functionality from drawer & settings
 
-## 🏗️ Architecture & Clean Code
+### 🏠 Dashboard (Home Screen)
+- **User profile section** with avatar, name, email/role
+- **Statistics cards** — Projects, Skills count, Tasks
+- **About Me card** — personal bio/description
+- **Quick Actions** — shortcut buttons to Skills & Settings
+- **Drawer navigation toggle** from the top bar
+- **Notification badge** indicator
 
-This application strictly adheres to the principles of **Clean Code Architecture**:
-- **Separation of Concerns**: UI components, styling logic, theme tokens, and routing are strictly decoupled.
-- **Modular Components**: Reusable components (`AppText`, `AppCard`, `AppButton`, `SkillsCard`, etc.) ensure DRY code and easy maintainability.
-- **Centralized Theming**: Hardcoded values are eliminated. Spacing, colors, and typography are driven by a centralized `theme` directory (`spacing.ts`, `colors.ts`, `typography.ts`).
-- **Type Safety**: Built robustly using **TypeScript** with strict interfaces (like `SkillItem`) preventing runtime errors and ensuring predictable code.
+### 🛠 Skills Management
+- **Skills list** displayed with `FlatList` for performant scrolling
+- **Add Skill modal** — bottom sheet with:
+  - Skill name text input
+  - Level picker (Beginner / Intermediate / Advanced) — chip selection
+  - Badge picker (Good / Very Good / Professional / Expert) — chip selection
+- **Dynamic skill count** reflected across the app
+- **Skills context** (`SkillsProvider` / `useSkills`) for global CRUD state
+- **Empty state** with icon when no skills exist
+- **12 pre-loaded skills** (React, Next.js, TypeScript, React Native, etc.)
 
-## 🛠️ Tech Stack
+### ⚙️ Settings
+- **Settings hub** with cards linking to sub-screens:
+  - 🧑 **Account** — view & edit profile info (name, email, phone, location) with inline editing
+  - 🔔 **Notifications** — toggle push, email, reminders, updates, sound & vibration
+  - 🔒 **Privacy** — toggle privacy settings with switches
+  - ❓ **Help & FAQ** — expandable FAQ accordion + contact/support links
+- **Theme selector** — Light / Dark / System with `ThemeButton` toggle
+- **Language selector** — Arabic / English toggle buttons
+- **Logout button**
 
-- **Framework**: [React Native](https://reactnative.dev/) & [Expo](https://expo.dev/)
-- **Language**: [TypeScript](https://www.typescriptlang.org/)
-- **Routing**: [Expo Router](https://docs.expo.dev/router/introduction/) (File-based Routing)
-- **Icons**: `@expo/vector-icons` (Ionicons)
-- **State Management**: React Hooks & Context API
+### 🌗 Theme System (Dark / Light / System)
+- **3 theme modes**: Light, Dark, System (follows device preference)
+- **Theme persistence** via `AsyncStorage`
+- **Comprehensive design tokens**:
+  - Accent colors (Cobalt Blue family)
+  - Surface/background hierarchy (3-tier)
+  - Semantic colors (success, danger, warning)
+  - Text colors with **WCAG AA/AAA contrast compliance**
+  - Single consistent border token
+- **Quick light/dark toggle** in the top bar
+- **Full theme toggle** in Settings with visual buttons
+- **`ThemeProvider` / `useTheme` context** for app-wide reactivity
+
+### 🌐 Internationalization (i18n) — Arabic & English
+- **Full bilingual support** (Arabic 🇸🇦 & English 🇬🇧)
+- **RTL/LTR layout flipping** — all rows, alignments, and text directions adapt
+- **Language persistence** via `AsyncStorage`
+- **Powered by** `i18next` + `react-i18next`
+- **Toggle from**:
+  - Login screen (globe button)
+  - Home screen top bar
+  - Settings screen (language card)
+- **Localized content**: all labels, buttons, placeholders, alerts, skill levels & badges
+
+### 🧭 Drawer Navigation
+- **Slide-out drawer** with:
+  - User avatar, name, and email
+  - Navigation items: Dashboard, Skills, Settings (with icons)
+  - Logout button
+  - Social media links (GitHub, LinkedIn, Instagram)
+  - Footer with copyright text
+- **RTL-aware** — drawer opens from right in Arabic, left in English
+- **Custom drawer content** component (`DrawerContent`)
+
+### 🧩 Reusable Component Library
+
+| Component | Description |
+|---|---|
+| `AppSafeAreaView` | Safe-area wrapper with StatusBar management |
+| `AppCard` | Surface card with 1px border, no drop shadows |
+| `AppButton` | Multi-variant button (primary, outlined, danger, success, warning) with icon support |
+| `AppText` | Typography component with variants (title, subTitle, body, caption, button) |
+| `Avatar` | Circular avatar with image or initials fallback |
+| `StatCard` | Statistic display card with icon, label, and value |
+| `SkillCard` | Skill item card with icon, title, level, and badge |
+| `ThemeButton` | Selectable theme option button with icon |
+| `SettingScreenHeader` | Reusable header for settings sub-screens |
+| `DrawerContent` | Custom drawer navigation content |
+| `LoginScreen` | Full login form component |
+
+---
+
+## 🏗 Tech Stack
+
+| Technology | Purpose |
+|---|---|
+| **React Native** `0.86` | Cross-platform mobile framework |
+| **Expo** `~57.0` | Development platform & tooling |
+| **Expo Router** | File-based routing with typed routes |
+| **TypeScript** `~6.0` | Static type safety |
+| **React** `19.2` | UI library |
+| **react-native-gesture-handler** | Touch & gesture handling |
+| **react-native-reanimated** `4.5` | Animations engine |
+| **react-native-screens** | Native screen containers |
+| **react-native-safe-area-context** | Safe area insets |
+| **@react-navigation/drawer** | Drawer navigation |
+| **expo-secure-store** | Encrypted credential storage |
+| **@react-native-async-storage/async-storage** | Persistent key-value storage |
+| **i18next** + **react-i18next** | Internationalization framework |
+| **@expo-google-fonts/almarai** | Arabic-optimized Google Font (4 weights) |
+| **@expo/vector-icons** (Ionicons) | Icon library |
+| **expo-font** | Custom font loading |
+| **expo-image** | Optimized image component |
+| **expo-splash-screen** | Splash screen management |
+| **expo-linking** | Deep linking & external URL opening |
+| **react-native-web** | Web platform support |
+| **React Compiler** (experimental) | Automatic memoization |
+
+---
+
+## 📁 Project Structure
+
+```
+src/
+├── app/                          # Expo Router — file-based screens
+│   ├── _layout.tsx               # Root layout (providers + drawer)
+│   ├── index.tsx                  # Home / Dashboard screen
+│   ├── skills/
+│   │   └── index.tsx             # Skills list + add modal
+│   └── setting/
+│       ├── _layout.tsx           # Settings stack layout
+│       ├── index.tsx             # Settings hub
+│       ├── account.tsx           # Account settings
+│       ├── notifications.tsx     # Notification preferences
+│       ├── privacy.tsx           # Privacy settings
+│       └── help.tsx              # Help & FAQ
+├── components/                   # Reusable UI components
+│   ├── AppButton/
+│   ├── AppCard/
+│   ├── AppSafeAreaView/
+│   ├── AppText/
+│   ├── Avatar/
+│   ├── DrawerContent/
+│   ├── LoginScreen/
+│   ├── SettingScreenHeader/
+│   ├── SkillCard/
+│   ├── StatCard/
+│   └── ThemeButton/
+├── context/                      # React Context providers
+│   ├── AuthContext.tsx            # Authentication state
+│   ├── ThemeContext.tsx           # Theme mode & colors
+│   └── SkillsContext.tsx         # Skills CRUD state
+├── services/
+│   └── authService.ts            # API client for authentication
+├── i18n/
+│   ├── i18n.ts                   # i18next configuration
+│   └── locales/
+│       ├── ar.ts                 # Arabic translations
+│       └── en.ts                 # English translations
+├── theme/                        # Design system tokens
+│   ├── colors.ts                 # Light/dark color palettes
+│   ├── spacing.ts                # Spacing & border-radius scale
+│   └── typography.ts             # Font families, sizes, line heights
+├── hooks/                        # Custom React hooks
+│   ├── use-color-scheme.ts
+│   ├── use-color-scheme.web.ts
+│   └── use-theme.ts
+├── constants/
+│   └── theme.ts                  # Theme constants
+└── global.css                    # Global styles
+```
+
+---
+
+## 🎨 Design System
+
+### Color Palette
+- **Single accent family**: Precision Cobalt (`#1D4ED8` light / `#3B82F6` dark)
+- **Neutral family**: Cool Slate scale (50–950)
+- **Semantic colors**: Success (green), Danger (red), Warning (amber) — used only for meaning
+- **WCAG AA/AAA compliant** text contrast ratios
+
+### Typography
+- **Font**: [Almarai](https://fonts.google.com/specimen/Almarai) (Google Font — Arabic-optimized)
+- **Weights**: Light (300), Regular (400), Bold (700), ExtraBold (800)
+- **Scale**: `12 / 14 / 16 / 20 / 24 / 32 / 48`px
+
+### Spacing
+- **4px grid system**: `xs(4) / sm(8) / md(16) / lg(24) / xl(32) / xxl(40)`
+- **Border radius**: `none(0) / sm(4) / md(8) / lg(12) / xl(16) / full(9999)`
+
+---
 
 ## 🚀 Getting Started
 
 ### Prerequisites
-Make sure you have Node.js and Expo CLI installed on your machine.
-- Node.js (v18 or newer recommended)
-- Expo Go app on your physical device, or an iOS/Android simulator.
+- Node.js (v18+)
+- npm or yarn
+- Expo CLI
+- Android Studio / Xcode (for emulators) or Expo Go app
 
 ### Installation
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/Ahmedaminn1/Profile-Dashboard-Mobile-Application.git
-   ```
+```bash
+# Clone the repository
+git clone https://github.com/Ahmedaminn1/Profile-Dashboard-Mobile-Application.git
 
-2. **Navigate to the project directory:**
-   ```bash
-   cd profile-dashboard
-   ```
+# Navigate to the project
+cd profile-dashboard
 
-3. **Install dependencies:**
-   ```bash
-   npm install
-   # or
-   yarn install
-   ```
+# Install dependencies
+npm install
 
-4. **Start the development server:**
-   ```bash
-   npx expo start
-   ```
-
-5. **Run the app:**
-   Open the **Expo Go** app on your phone and scan the QR code displayed in your terminal.
-
-## 📂 Folder Structure
-
-```text
-src/
-├── app/            # Expo Router pages (_layout.tsx, index.tsx, skills/, setting/)
-├── components/     # Reusable UI components (AppText, AppCard, AppButton, etc.)
-├── context/        # React Context providers (e.g., ThemeContext)
-├── theme/          # Centralized theme tokens (colors, spacing, typography)
-└── assets/         # Images, fonts, and static resources
+# Start the development server
+npm run start
 ```
 
-## 👨‍💻 Author
+### Available Scripts
 
-Built with ❤️ by **[Ahmed Amin](https://github.com/Ahmedaminn1)**.  
-Focused on delivering premium quality and clean architecture in software development.
+| Script | Command | Description |
+|---|---|---|
+| Start | `npm run start` | Launch Expo dev server |
+| Android | `npm run android` | Run on Android emulator/device |
+| iOS | `npm run ios` | Run on iOS simulator/device |
+| Web | `npm run web` | Run in web browser |
+| Lint | `npm run lint` | Run ESLint |
 
 ---
-⭐ Don't forget to leave a star if you like this repository!
+
+## 📄 License
+
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 👤 Author
+
+**Ahmed Amin**
+
+- GitHub: [@Ahmedaminn1](https://github.com/Ahmedaminn1)
+- LinkedIn: [ahmed-aminn](https://www.linkedin.com/in/ahmed-aminn/)
